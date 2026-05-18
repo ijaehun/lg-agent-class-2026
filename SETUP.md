@@ -147,7 +147,76 @@ python hello.py
 ```
 (Mac 은 `python3 hello.py`)
 
-Gemini 응답이 한 줄 출력되면 **셋업 완료** 🎉
+Gemini 응답이 한 줄 출력되면 **기본 환경 셋업 완료** 🎉
+
+---
+
+## 7. VS Code 설치
+
+코드를 편집할 에디터입니다. 강의 내내 사용합니다.
+
+### Windows
+1. [code.visualstudio.com](https://code.visualstudio.com) 에서 **"Download for Windows"** 클릭 → installer 실행
+2. installer 단계에서 다음 옵션 모두 체크 권장:
+   - "Add 'Open with Code' action to Windows Explorer file context menu"
+   - "Add 'Open with Code' action to Windows Explorer directory context menu"
+   - **"Add to PATH"** ⚠️ (터미널에서 `code .` 명령으로 열 수 있게)
+
+### macOS
+1. [code.visualstudio.com](https://code.visualstudio.com) 에서 **"Download for Mac"** → zip 다운로드
+2. 압축 해제 → `Visual Studio Code.app` 을 **Applications 폴더** 로 드래그
+3. (옵션) `Cmd+Shift+P` → "Shell Command: Install 'code' command in PATH" 실행 → 터미널에서 `code .` 사용 가능
+
+### 프로젝트 폴더 열기
+```bash
+cd lg-agent-class-2026
+code .
+```
+`code` 명령이 안 되면 VS Code 를 직접 실행 → `File → Open Folder` → `lg-agent-class-2026` 폴더 선택.
+
+### (선택) 권장 익스텐션
+VS Code 왼쪽 사이드바 **Extensions** (네모 4개 아이콘) 에서:
+- **Python** (Microsoft 공식)
+- **한국어 언어팩** (Korean Language Pack — 메뉴 한글로 보고 싶은 분만)
+
+---
+
+## 8. GitHub Copilot 가입 + 설치
+
+강의 **Week 0** 에서 "LLM 이 코드를 만들어주는 경험" 을 위해 사용합니다.
+
+### (1) GitHub 계정 + Copilot Free plan 가입
+
+1. GitHub 계정 없으면 [github.com](https://github.com) 에서 가입 (이메일 + 패스워드 + 2FA 권장)
+2. 로그인 상태에서 [github.com/features/copilot](https://github.com/features/copilot) 접속
+3. **"Get started for free"** 클릭 → 신용카드 필요 없음
+4. Copilot Free plan 가입 완료
+
+> **Free plan 한도** (2026년 1월 기준): 월 2,000건 code completion + 50건 chat. 강의용으로 차고 넘침.
+
+### (2) VS Code 익스텐션 설치
+
+1. VS Code 실행
+2. 왼쪽 사이드바 **Extensions** (네모 4개 아이콘) 클릭
+3. 검색창에 **"GitHub Copilot"** 입력
+4. 두 개 모두 설치:
+   - **GitHub Copilot** (자동완성)
+   - **GitHub Copilot Chat** (채팅 인터페이스)
+
+### (3) 로그인
+
+1. 설치 후 우측 하단에 **"Sign in to GitHub"** 알림 → 클릭
+2. 브라우저로 인증 페이지 열림 → **Authorize** 클릭
+3. VS Code 로 돌아오면 자동 연결
+
+### (4) 동작 확인
+
+1. VS Code 에서 빈 `.py` 파일 새로 만들기
+2. 주석 한 줄 입력: `# 1부터 10까지 더하는 함수`
+3. **엔터** 치면 회색 글씨로 코드 제안 보임
+4. **Tab** 키로 수락 / **Esc** 로 거절
+
+회색 제안이 뜨면 성공. Week 0 강의에서 본격적으로 체험합니다.
 
 ---
 
@@ -161,5 +230,9 @@ Gemini 응답이 한 줄 출력되면 **셋업 완료** 🎉
 | PowerShell 에서 Activate.ps1 실행 거부 | 위 3번의 `Set-ExecutionPolicy` 명령 한 번 실행 |
 | `ModuleNotFoundError: No module named 'google'` | 가상환경 활성화 안 됨. 프롬프트에 `(.venv)` 있는지 확인 |
 | `KeyError: 'GEMINI_API_KEY'` | `.env` 파일이 프로젝트 폴더에 있는지, 키 이름 오타 없는지 확인 |
+| 터미널에서 `code .` 명령 안 됨 (Win) | VS Code installer 의 "Add to PATH" 체크 누락. installer 재실행해서 옵션 추가 |
+| 터미널에서 `code .` 명령 안 됨 (Mac) | VS Code → `Cmd+Shift+P` → "Shell Command: Install 'code' command in PATH" 실행 |
+| Copilot 회색 제안이 안 뜸 | ① 우측 하단 Copilot 아이콘 클릭해서 활성 상태인지 확인 ② Sign in 다시 시도 ③ Free plan 가입했는지 확인 |
+| GitHub 가입 시 회사 이메일이 보안에 막힘 | 개인 이메일 (Gmail 등) 로 가입 |
 
 해결 안 되는 문제는 강의 첫 회차에 강사에게 문의 주세요.
