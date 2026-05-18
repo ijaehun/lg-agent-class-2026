@@ -129,26 +129,14 @@ pip install -r requirements.txt
 
 ### (2) `.env` 파일 만들기
 
-프로젝트 폴더에 이미 **`.env.example`** 이라는 템플릿이 있습니다. 이걸 복사해서 `.env` 로 이름 바꾸세요.
-
-**Windows (PowerShell)**:
-```powershell
-Copy-Item .env.example .env
-```
-
-**macOS**:
-```bash
-cp .env.example .env
-```
-
-그 다음 `.env` 파일을 에디터로 열어서 `your-key-here` 부분을 본인이 발급받은 키로 교체:
+프로젝트 폴더 (`lg-agent-class-2026/`) 안에 **`.env`** 라는 파일을 새로 만들고 아래 한 줄만 적습니다:
 
 ```
 GEMINI_API_KEY=AIzaSy...본인키...
 ```
 
 ⚠️ 따옴표 없이, `=` 양쪽에 공백 없이.
-⚠️ **`.env.example` 에는 키를 넣지 마세요** — 그건 학생 공유용 템플릿이고, 진짜 키는 **`.env`** 에 들어가야 합니다 (`.env` 는 `.gitignore` 처리되어 Git 에 안 올라감).
+⚠️ `.env` 는 `.gitignore` 에 들어있어서 Git 에 안 올라갑니다. 안심하고 키 넣어도 됩니다.
 
 ---
 
@@ -242,7 +230,6 @@ VS Code 왼쪽 사이드바 **Extensions** (네모 4개 아이콘) 에서:
 | PowerShell 에서 Activate.ps1 실행 거부 | 위 3번의 `Set-ExecutionPolicy` 명령 한 번 실행 |
 | `ModuleNotFoundError: No module named 'google'` | 가상환경 활성화 안 됨. 프롬프트에 `(.venv)` 있는지 확인 |
 | `KeyError: 'GEMINI_API_KEY'` | `.env` 파일이 프로젝트 폴더에 있는지, 키 이름 오타 없는지 확인 |
-| `.env.example` 에 키 넣었는데 동작 안 함 | `.env.example` 은 템플릿. 복사해서 `.env` 로 만든 뒤 그 안에 키 넣어야 함 (위 5번 (2) 참고) |
 | `503 UNAVAILABLE` / `experiencing high demand` | Gemini 서버 일시 과부하. 다시 실행하면 보통 통과. 안 되면 1~2분 후 재시도 |
 | 터미널에서 `code .` 명령 안 됨 (Win) | VS Code installer 의 "Add to PATH" 체크 누락. installer 재실행해서 옵션 추가 |
 | 터미널에서 `code .` 명령 안 됨 (Mac) | VS Code → `Cmd+Shift+P` → "Shell Command: Install 'code' command in PATH" 실행 |
