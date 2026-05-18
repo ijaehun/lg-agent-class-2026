@@ -56,8 +56,8 @@ print(f"\n[LLM 도구 요청] {function_call.name}(args={dict(function_call.args
 
 
 # === 3단계: 우리 코드가 실제로 실행 ===
-# TODO (1): LLM 이 요청한 함수를 실제로 호출하세요.
-#   function_call.name 은 "get_weather", function_call.args 는 {"city": "서울"} 같은 dict.
+# TODO (1): LLM 이 요청한 함수를 실제로 호출해보세요.
+#   생각해볼 거리: 왜 * 한 개가 아니라 ** 두 개? (function_call.args 는 dict)
 #   힌트: get_weather(**function_call.args)
 result = ___
 print(f"[실행 결과] {result}")
@@ -67,6 +67,7 @@ print(f"[실행 결과] {result}")
 history.append(resp.candidates[0].content)
 
 # TODO (2): 도구 실행 결과를 history 에 추가하세요.
+#   생각해볼 거리: role 이 왜 'user' 일까? 도구 결과를 user 메시지로 취급하는 이유는?
 #   형식: {"role": "user", "parts": [{"function_response": {"name": <함수명>, "response": {"result": <결과>}}}]}
 history.append(___)
 

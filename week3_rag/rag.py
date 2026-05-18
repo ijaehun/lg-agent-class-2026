@@ -64,6 +64,8 @@ def search_docs(query: str) -> list[dict]:
         text = (doc["title"] + " " + doc["content"]).lower()
 
         # TODO (1): 검색 점수 계산.
+        #   생각해볼 거리: 실전에선 임베딩 + 벡터 DB 를 쓰는데, 그래도 본질은 같아요.
+        #     "관련성 있는 문서를 골라 LLM 에게 준다"
         #   keywords 중 몇 개가 text 안에 나오는지 카운트하세요.
         #   힌트: score = sum(1 for kw in keywords if kw in text)
         score = ___

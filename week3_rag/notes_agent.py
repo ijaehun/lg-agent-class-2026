@@ -85,8 +85,9 @@ def search_files(keyword: str) -> list[dict]:
 
 
 # TODO (1): 이름 → 실제 함수 라우팅 딕셔너리를 채우세요.
+#   생각해볼 거리: 이 딕셔너리가 곧 "LLM 이 부른 이름을 우리 함수로 연결" 하는 핵심.
+#     본인 업무 도구로 변형할 때 가장 먼저 손대는 자리.
 #   힌트: {"list_files": list_files, "read_file": read_file, "search_files": search_files}
-#   이 딕셔너리가 곧 "LLM 이 부른 이름을 우리 함수로 연결" 하는 핵심.
 TOOL_FUNCTIONS = ___
 
 

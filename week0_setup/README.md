@@ -1,75 +1,118 @@
 # Week 0 — 환경 셋업 + Copilot 첫 실습
 
 본 강의 (5주) 시작 전 **사전 단발 세션** 입니다. 1.5시간.
-다음 회차부터의 실습이 매끄럽게 굴러가도록 환경을 다 같이 점검하고, 첫 LLM 실습을 합니다.
+A반/B반 통합 운영 권장.
 
-## 이번 시간에 할 것
+## 이번 주에 배우는 것
 
-1. **환경 점검** (사전에 `SETUP.md` 따라온 분 기준)
-   - `python check_setup.py` 가 Gemini 응답을 받아오는지 확인
-   - 안 되는 분 — 다 같이 잡고 갑니다
-2. **GitHub Copilot 설치 + 첫 실습**
-   - VS Code 에 Copilot 깔기
-   - 빈 파일에 주석만 적어도 코드가 만들어지는 마법(?)을 본다
-3. **핵심 메시지 한 가지**
-   - "Copilot 도 결국 LLM 한 번 호출. 다음 주부터 그 본질을 우리가 직접 만들어볼 것."
+- 본인 노트북에서 `python check_setup.py` 가 Gemini 응답을 받아오는 상태 만들기
+- GitHub Copilot 깔고 첫 사용해보기
+- **"Copilot 도 결국 LLM 호출"** 이라는 본질에 대한 첫 감
 
-## 마치고 나면 (체크리스트)
+## 회차 끝나면 답할 수 있어야 하는 질문
 
-- [ ] `.venv` 활성화 상태에서 `python check_setup.py` 가 동작한다
-- [ ] VS Code 의 Copilot 익스텐션이 활성 (오른쪽 아래에 Copilot 아이콘 보임)
-- [ ] `copilot_play.py` 의 주석에서 Copilot 이 코드를 제안한 경험이 있다
+1. Copilot 이 코드를 만들어주는 **원리** 는 무엇인가? (어떤 정보를 어디에 보내고 무엇을 받아오는가)
+2. 같은 주석을 적어도 학생마다 받는 코드가 다른 이유는?
+3. Copilot 의 답이 옳은지 어떻게 알 수 있을까?
+
+→ 이 질문들이 다음 주 (W1 LLM 호출) 로 자연스럽게 이어집니다.
 
 ---
 
-## (1) 사전 작업 — 강의 전에 끝내고 오세요
+## 무엇을 만들 건가
 
-`SETUP.md` 의 1~8 단계까지 따라 하면 끝입니다.
-도중에 `python check_setup.py` 가 Gemini 응답을 받아오는 것까지 (6단계), 그리고 VS Code + Copilot 설치 (7~8단계) 까지 확인해주세요.
+- 환경 셋업 검증 끝까지 — `python check_setup.py` ✅
+- Copilot 으로 미션 4개 풀기 — `copilot_play.py`
 
-안 되면 그대로 강의에 와도 됩니다. **다 같이 잡고 가는 시간** 이 회차의 절반입니다.
+## 어떻게 접근하나 — 바이브 코딩 사고법 첫걸음
 
----
+> **"Copilot 한테 무엇을 시킬지 / 받은 답이 옳은지 평가할 수 있어야"** 가 이 강의 전체의 목적.
+> Week 0 는 그 첫 감을 잡는 시간.
 
-## (2) Copilot 설치 안내
+### 단계별 사고
 
-### a. GitHub 계정 + Copilot Free plan 가입
+**1. Copilot 한테 무엇을 만들어달라고 하나?**
+주석 또는 채팅으로 **의도** 를 명확히 (모호하면 답도 모호).
 
-1. GitHub 계정이 없으면 [github.com](https://github.com) 에서 가입 (이메일 + 패스워드)
-2. 로그인 상태에서 [github.com/features/copilot](https://github.com/features/copilot) 접속
-3. **"Get started for free"** 클릭 — 신용카드 필요 없음
-4. Copilot Free plan 가입 완료
+**2. 받은 코드를 어떻게 평가하나?**
+- 실행해서 결과 확인
+- 다른 사람 코드와 비교 (학생마다 답이 다름)
+- 옆 사람의 답이 더 짧다 / 길다 — 왜 그럴까?
 
-> **Free plan 한도** (2026년 1월 기준): 월 2,000건 code completion + 50건 chat. 강의 한 회차엔 차고 넘칩니다.
+**3. 학생마다 답이 다른 이유?**
+LLM 은 **확률적 생성** — 같은 입력에도 매번 살짝 다른 코드. 이게 LLM 의 본질.
 
-### b. VS Code 익스텐션 설치
-
-1. VS Code 실행
-2. 왼쪽 사이드바의 **Extensions** (네모 4개 아이콘) 클릭
-3. 검색창에 **"GitHub Copilot"** 입력
-4. 두 개 모두 설치:
-   - **GitHub Copilot** (자동완성)
-   - **GitHub Copilot Chat** (채팅 인터페이스)
-5. 설치 후 우측 하단에 "Sign in to GitHub" 알림 → 클릭해서 로그인
-
-### c. 동작 확인
-
-- VS Code 오른쪽 아래에 Copilot 아이콘이 보이면 OK
-- 호버하면 "Copilot is ready" 같은 메시지
+**4. 그런데 강의에서는 starter 따라치기 위주?**
+"왜 그런지 / 어떻게 동작하는지" 를 머리에 박는 단계. **그게 잡혀야 Copilot 답을 평가할 수 있어요.**
 
 ---
 
-## (3) 첫 실습: copilot_play.py
+## 직접 해야 하는 것
 
-`week0_setup/copilot_play.py` 를 열고 강의 진행에 따라 함께 실습합니다.
-빈 파일에 **주석 한 줄** 만 적어도 Copilot 이 코드를 제안해줄 거예요.
+### 사전 작업 — 강의 전에 끝내고 오세요
 
-학생이 미리 풀어보고 와도 좋습니다. 단, 결과물이 모두 다르게 나옵니다 — **그게 이번 시간의 포인트**.
-1주차 본 실습부터는 동일 결과를 위해 starter 코드를 따라갑니다.
+`SETUP.md` 의 1~8 단계 전부.
+끝까지 가서 `python check_setup.py` 가 Gemini 응답을 받아오고, VS Code 의 Copilot 회색 제안까지 뜨면 OK.
+
+**막혀도 OK** — Week 0 시간의 핵심이 다 같이 잡고 가는 거예요. 안 되는 상태로 와도 됩니다.
+
+### 강의 시간에 — 환경 점검 (사전 작업 못 한 분 위주)
+
+다 같이:
+1. `python --version` 으로 Python 3.12+ 확인
+2. `.venv` 활성화 → `(.venv)` 프롬프트 확인
+3. `pip install -r requirements.txt`
+4. `.env` 파일에 `GEMINI_API_KEY` 설정
+5. `python check_setup.py` 동작 확인
+
+자주 막히는 곳은 `SETUP.md` 의 "자주 발생하는 문제" 표 참고.
+
+### 강의 시간에 — Copilot 설치 + 로그인
+
+VS Code 의 GitHub Copilot 익스텐션 + Copilot Chat. 자세한 단계는 `SETUP.md` 의 8번 참고. 모두 설치 끝나면 다음 단계로.
+
+### Copilot 첫 실습 — `copilot_play.py`
+
+파일 열고 미션 4개 (합 함수 / 일반화 / 날짜 / 정규식):
+
+**(1) 주석 한 줄 적고 엔터**
+```python
+# 1부터 10까지 더하는 함수를 만들고 결과를 출력하세요.
+```
+회색 글씨로 코드 제안 → **Tab** 으로 수락.
+
+**(2) 학생마다 받은 코드 비교**
+옆 사람과 비교 — 같은가? 다른가? 다르면 어디가?
+
+**(3) 직접 실행해서 결과 확인**
+```bash
+python copilot_play.py
+```
+
+**(4) 평가**
+- 코드가 의도대로 동작하나?
+- 더 좋은 방법이 있을까? Copilot 한테 추가 프롬프트 ("이 함수를 더 짧게 짜줘") 던져보기
+
+### 마치고 나면 — 체크리스트
+
+- [ ] `python check_setup.py` 가 Gemini 응답을 받아온다
+- [ ] VS Code 의 Copilot 익스텐션이 활성 (우측 하단 아이콘)
+- [ ] `copilot_play.py` 에서 회색 제안 받은 경험이 있다
+- [ ] "Copilot 도 결국 LLM 호출" 이라는 감이 살짝 잡힌다
 
 ---
 
-## 다음 회차 (Week 1) 예고
+## 다음 주 (Week 1) 예고
 
 다음 시간에는 Copilot 없이 우리가 직접 `hello.py` 의 정체를 분해해봅니다.
-"방금 Copilot 이 우리에게 코드를 만들어준 그 과정" 의 가장 작은 단위가 무엇인지 직접 손으로 짜봅니다.
+**Copilot 이 코드를 만든 그 과정 — `client.models.generate_content(...)` 한 줄** 이 Week 1 의 주제입니다.
+
+> "Copilot 한테 시켜도 되는데 왜 직접 짜요?"
+> → Copilot 답이 옳은지 평가할 수 있는 능력. 그게 5주의 핵심.
+
+---
+
+## 핵심 메시지 한 줄
+
+> **Copilot 이 만든 코드 = 어디선가 본인이 짤 코드와 같은 패턴.**
+> 다음 주부터 그 패턴을 손에 직접 익힙니다.

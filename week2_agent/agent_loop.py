@@ -97,6 +97,7 @@ for turn in range(1, MAX_TURNS + 1):
     function_calls = [p.function_call for p in content.parts if p.function_call]
 
     # TODO (1): 종료 조건을 채우세요.
+    #   생각해볼 거리: 이 break 가 없으면 어떻게 될까? (무한 루프? MAX_TURNS 도달?)
     #   function_calls 가 비어있으면 = LLM 이 자연어로 답한 상태 → 출력하고 break.
     #   힌트:
     #     if not function_calls:
@@ -113,6 +114,7 @@ for turn in range(1, MAX_TURNS + 1):
         print(f"[도구 요청] {fc.name}({dict(fc.args)})")
 
         # TODO (2): 이름(fc.name) 으로 실제 함수를 라우팅해서 호출하세요.
+        #   생각해볼 거리: 도구가 100개라면? 딕셔너리 라우팅이 if/elif 보다 나은 이유.
         #   힌트: TOOL_FUNCTIONS 딕셔너리를 사용. result = TOOL_FUNCTIONS[fc.name](**fc.args)
         result = ___
 
