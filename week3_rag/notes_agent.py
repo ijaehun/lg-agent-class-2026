@@ -1,13 +1,13 @@
 """
-실전 데모: 로컬 노트/문서 검색 에이전트.
+W2 + W3 통합 실전판: 노트 도우미 에이전트.
 
-rag.py 의 "진짜 버전". 하드코딩 DOCS 대신 디스크의 실제 파일을 검색·읽음.
-NOTES_DIR 환경변수로 검색 대상 디렉터리 변경 가능 (기본: 현재 폴더).
+W2 의 list_notes / read_note + W3 의 search_notes — 도구 3개가 협업.
+NOTES_DIR 환경변수로 본인 폴더를 가리키게 할 수 있다.
 
 학습 포인트:
-  - 골격은 그대로 (agent loop). 도구만 search_docs → list/read/search 로 교체.
-  - ★ 이 파일이 다음 단계의 베이스입니다.
-    B반 후반: TOOL_FUNCTIONS + tool_declarations 만 본인 업무 도구로 갈아끼우면
+  - 골격은 그대로 (W2 의 agent_loop). 도구만 1개 → 3개로 확장.
+  - ★ 이 파일이 다음 단계의 베이스.
+    본인 업무 도구 (예: 사내 위키 API, 슬랙 검색) 로 TOOL_FUNCTIONS 만 갈아끼우면
     내 업무용 에이전트가 됨.
 
 실행:
@@ -27,15 +27,15 @@ client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.5-flash"
 MAX_TURNS = 10
 
-NOTES_DIR = Path(os.environ.get("NOTES_DIR", ".")).resolve()
-ALLOWED_EXTENSIONS = {".md", ".txt", ".py"}
+DEFAULT_NOTES_DIR = Path(__file__).parent.parent / "notes"
+NOTES_DIR = Path(os.environ.get("NOTES_DIR", str(DEFAULT_NOTES_DIR))).resolve()
+ALLOWED_EXTENSIONS = {".md", ".txt"}
 EXCLUDE_DIR_NAMES = {".venv", "__pycache__", "node_modules", ".git"}
 MAX_FILE_BYTES = 50_000
 
 
-# === 도구 1: 파일 목록 ===
-def list_files() -> list[str]:
-    """검색 가능한 파일 목록을 NOTES_DIR 기준 상대 경로로 반환."""
+# === 도구 1: 노트 목록 ===
+def list_notes() -> list[str]:
     out = []
     for path in NOTES_DIR.rglob("*"):
         if not path.is_file() or path.suffix not in ALLOWED_EXTENSIONS:
@@ -47,14 +47,13 @@ def list_files() -> list[str]:
     return sorted(out)
 
 
-# === 도구 2: 파일 읽기 ===
-def read_file(path: str) -> str:
-    """지정한 파일의 전체 내용을 반환 (50KB 초과 시 잘림)."""
-    full = (NOTES_DIR / path).resolve()
+# === 도구 2: 노트 읽기 ===
+def read_note(filename: str) -> str:
+    full = (NOTES_DIR / filename).resolve()
     if not full.is_relative_to(NOTES_DIR):
-        return f"[오류] 접근 불가 경로: {path}"
+        return f"[오류] 접근 불가 경로: {filename}"
     if not full.exists() or not full.is_file():
-        return f"[오류] 파일 없음: {path}"
+        return f"[오류] 파일 없음: {filename}"
     content = full.read_text(encoding="utf-8", errors="replace")
     if len(content) > MAX_FILE_BYTES:
         cut = len(content) - MAX_FILE_BYTES
@@ -63,11 +62,10 @@ def read_file(path: str) -> str:
 
 
 # === 도구 3: 키워드 검색 ===
-def search_files(keyword: str) -> list[dict]:
-    """모든 파일에서 키워드를 찾아 매칭 파일·라인 일부를 반환."""
+def search_notes(keyword: str) -> list[dict]:
     results = []
     kw = keyword.lower()
-    for filename in list_files():
+    for filename in list_notes():
         full = NOTES_DIR / filename
         try:
             content = full.read_text(encoding="utf-8", errors="replace")
@@ -87,30 +85,30 @@ def search_files(keyword: str) -> list[dict]:
 # TODO (1): 이름 → 실제 함수 라우팅 딕셔너리를 채우세요.
 #   생각해볼 거리: 이 딕셔너리가 곧 "LLM 이 부른 이름을 우리 함수로 연결" 하는 핵심.
 #     본인 업무 도구로 변형할 때 가장 먼저 손대는 자리.
-#   힌트: {"list_files": list_files, "read_file": read_file, "search_files": search_files}
+#   힌트: {"list_notes": list_notes, "read_note": read_note, "search_notes": search_notes}
 TOOL_FUNCTIONS = ___
 
 
 tool_declarations = [
     {
-        "name": "list_files",
-        "description": "검색 가능한 노트/문서 파일 전체 목록을 반환. 무엇이 있는지 둘러볼 때.",
+        "name": "list_notes",
+        "description": "검색 가능한 노트 파일 전체 목록을 반환. 무엇이 있는지 둘러볼 때 사용.",
         "parameters": {"type": "object", "properties": {}},
     },
     {
-        "name": "read_file",
-        "description": "지정한 파일의 전체 내용을 읽어 반환. 자세한 내용이 필요할 때.",
+        "name": "read_note",
+        "description": "지정한 노트 파일의 전체 내용을 읽어 반환. 자세한 내용이 필요할 때.",
         "parameters": {
             "type": "object",
             "properties": {
-                "path": {"type": "string", "description": "list_files 가 반환한 상대 경로"},
+                "filename": {"type": "string", "description": "list_notes 가 반환한 상대 경로"},
             },
-            "required": ["path"],
+            "required": ["filename"],
         },
     },
     {
-        "name": "search_files",
-        "description": "모든 파일을 훑어 키워드 매칭 결과를 반환. 어디에 무엇이 있는지 찾을 때 먼저 사용.",
+        "name": "search_notes",
+        "description": "모든 노트를 훑어 키워드 매칭 결과를 반환. 어디에 무엇이 있는지 찾을 때 먼저 사용.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -123,10 +121,10 @@ tool_declarations = [
 
 
 SYSTEM_INSTRUCTION = (
-    f"당신은 로컬 디렉터리({NOTES_DIR}) 의 파일을 검색·읽어서 "
+    f"당신은 로컬 노트 폴더({NOTES_DIR}) 의 파일을 검색·읽어서 "
     "사용자 질문에 답하는 도우미입니다. "
-    "전략: 어떤 파일이 있는지 모르면 search_files 또는 list_files 로 먼저 살피고, "
-    "필요하면 read_file 로 자세히 본 뒤, 그 내용에 근거해서만 답하세요. "
+    "전략: 어떤 파일이 있는지 모르면 search_notes 또는 list_notes 로 먼저 살피고, "
+    "필요하면 read_note 로 자세히 본 뒤, 그 내용에 근거해서만 답하세요. "
     "파일에 없으면 추측하지 말고 '파일에 없습니다' 라고 답하세요. "
     "답변은 간결하게, 출처 파일명을 함께 적어주세요."
 )
@@ -147,7 +145,7 @@ def ask(question: str) -> None:
         function_calls = [p.function_call for p in content.parts if p.function_call]
 
         if not function_calls:
-            print(f"\n🤖 {resp.text}\n")
+            print(f"\n[답변] {resp.text}\n")
             return
 
         history.append(content)
@@ -169,9 +167,9 @@ def ask(question: str) -> None:
 
 
 if __name__ == "__main__":
-    print(f"📂 검색 디렉터리: {NOTES_DIR}")
-    print(f"📄 대상 확장자: {', '.join(sorted(ALLOWED_EXTENSIONS))}")
-    print("💬 질문을 입력하세요 (빈 줄 또는 'exit' 으로 종료)\n")
+    print(f"노트 폴더: {NOTES_DIR}")
+    print(f"대상 확장자: {', '.join(sorted(ALLOWED_EXTENSIONS))}")
+    print("질문을 입력하세요 (빈 줄 또는 'exit' 으로 종료)\n")
     while True:
         try:
             q = input("> ").strip()

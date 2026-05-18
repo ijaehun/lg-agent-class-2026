@@ -12,25 +12,28 @@ LG 연구원 대상 5주 LLM 에이전트 강의의 실습 코드 + 자료 저�
 ## 폴더 구조
 
 ```
+notes/            모든 회차가 공유하는 샘플 노트 (정책, 회의록, 온보딩)
 week0_setup/      Week 0: 환경 점검 + Copilot 실습
-week1_llm/        Week 1: LLM 호출의 가장 작은 단위 (hello, chat)
-week2_agent/      Week 2: 에이전트 정체 (tool_use, agent_loop)
-week3_rag/        Week 3: RAG + 실전 (rag, notes_agent)
-week4_langchain/  Week 4: LangChain — 우리 골격이 곧 LangChain
-week5_mcp/        Week 5: MCP 표준 + 종강 (mcp_server + Claude Desktop)
+week1_llm/        Week 1: LLM 호출 (내 노트는 모름)
+week2_agent/      Week 2: 에이전트 정체 (도구로 노트 읽기)
+week3_rag/        Week 3: RAG (검색 도구 추가)
+week4_langchain/  Week 4: LangChain — 같은 일을 한 줄로
+week5_mcp/        Week 5: MCP 표준 + 종강
 solutions/        강사용 완성본 (혼자 풀어보고 확인할 때만 열어보세요)
 ```
 
-## 강의 흐름
+## 강의 흐름 — 5주에 걸쳐 "내 노트 검색 도우미" 점진적 완성
 
-| 주차 | 주제 | 핵심 파일 |
-|---|---|---|
-| 0 | 환경 + Copilot 실습 | `week0_setup/copilot_play.py` |
-| 1 | LLM 다루기 | `hello.py` + `chat.py` |
-| 2 | 에이전트 정체 | `tool_use.py` + `agent_loop.py` |
-| 3 | RAG + 실전 | `rag.py` + `notes_agent.py` |
-| 4 | LangChain | `langchain_agent.py` |
-| 5 | MCP 표준 + 종강 | `mcp_server.py` + Claude Desktop |
+매주 같은 에이전트가 더 똑똑해져요. `notes/` 폴더의 사내 문서가 공유 데이터.
+
+| 주차 | 주제 | 핵심 파일 | 에이전트의 능력 |
+|---|---|---|---|
+| 0 | 환경 + Copilot 실습 | `copilot_play.py` | (셋업) |
+| 1 | LLM 다루기 | `hello.py` + `chat.py` | LLM 호출만. **내 노트는 모름** |
+| 2 | 에이전트 정체 | `tool_use.py` + `agent_loop.py` | 도구로 **노트를 읽음** |
+| 3 | RAG + 실전 | `rag.py` + `notes_agent.py` | 검색 추가 = **RAG** |
+| 4 | LangChain | `langchain_agent.py` | 같은 일을 **한 줄로** |
+| 5 | MCP 표준 + 종강 | `mcp_server.py` | 도구를 **표준 단자로** |
 
 ## 학습 방식
 

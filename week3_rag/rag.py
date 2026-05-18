@@ -1,16 +1,17 @@
 """
-Step 5b: 에이전트형 RAG — search_docs 도구를 가진 agent loop.
+Step 5: RAG = agent loop + 검색 도구 + grounding
 
 학습 목표:
-  - agent_loop.py 와 골격은 똑같다 (★). 도구가 search_docs 로 바뀌었을 뿐.
-  - + system_instruction 으로 "검색 결과에만 근거해 답하기" 를 강제 → 할루시네이션 방지.
-  - 즉 RAG = Retrieval(search_docs) + Augmented Generation(system_instruction 으로 grounding).
+  - W2 의 agent_loop 골격은 그대로. 도구만 search_notes 로 추가/교체.
+  - system_instruction 으로 "검색 결과에만 근거해 답하기" 강제 → 할루시네이션 방지
+  - 즉 RAG = Retrieval (search_notes) + Augmented Generation (system_instruction)
 
 실행:
   python rag.py
 """
 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -20,98 +21,67 @@ client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.5-flash"
 MAX_TURNS = 5
 
-
-# === 사내 위키 모킹 (실전에서는 벡터스토어 / DB) ===
-DOCS = [
-    {
-        "title": "연차 사용 정책",
-        "content": (
-            "정규직은 입사 1년 후부터 연차 15일을 사용할 수 있다. "
-            "신입사원은 입사 후 6개월 동안 월 1일씩 부여받는다. "
-            "미사용 연차는 다음 해로 최대 5일까지 이월 가능하다."
-        ),
-    },
-    {
-        "title": "재택근무 가이드",
-        "content": (
-            "주 2회까지 재택근무가 가능하다. 사전에 팀 리더 승인이 필요하며, "
-            "재택일에도 09:00-18:00 코어 시간은 응답 가능해야 한다."
-        ),
-    },
-    {
-        "title": "출장비 정산",
-        "content": (
-            "국내 출장은 일비 5만원, 숙박비 실비(최대 10만원/박). "
-            "해외는 지역별 차등. 영수증 첨부 필수, 출장 종료 후 7일 이내 정산."
-        ),
-    },
-    {
-        "title": "교육비 지원",
-        "content": (
-            "외부 교육·자격증 응시료는 연 100만원 한도로 지원. "
-            "사전 신청 후 부서장 승인이 필요하며, 수료증 제출 시 정산된다."
-        ),
-    },
-]
+NOTES_DIR = Path(__file__).parent.parent / "notes"
 
 
-# === 도구 실제 구현 (단순 키워드 매칭) ===
-def search_docs(query: str) -> list[dict]:
-    """간단한 키워드 점수 검색 — 실전에서는 임베딩 + 벡터 DB."""
-    keywords = query.lower().split()
-    scored = []
-    for doc in DOCS:
-        text = (doc["title"] + " " + doc["content"]).lower()
+# === 도구 구현: 키워드 검색 ===
+def search_notes(keyword: str) -> list[dict]:
+    """notes/ 폴더에서 키워드와 매칭되는 파일들을 점수순으로 반환."""
+    keywords = keyword.lower().split()
+    results = []
+    for path in NOTES_DIR.glob("*.md"):
+        text = path.read_text(encoding="utf-8").lower()
 
         # TODO (1): 검색 점수 계산.
-        #   생각해볼 거리: 실전에선 임베딩 + 벡터 DB 를 쓰는데, 그래도 본질은 같아요.
-        #     "관련성 있는 문서를 골라 LLM 에게 준다"
-        #   keywords 중 몇 개가 text 안에 나오는지 카운트하세요.
+        #   생각해볼 거리: 실전 RAG 는 임베딩 + 벡터 DB 지만 본질은 같아요.
+        #     "관련성 있는 문서를 골라 LLM 에 준다"
+        #   keywords 중 몇 개가 text 안에 나오는지 카운트.
         #   힌트: score = sum(1 for kw in keywords if kw in text)
         score = ___
 
         if score > 0:
-            scored.append((score, doc))
-    scored.sort(reverse=True, key=lambda x: x[0])
-    return [doc for _, doc in scored[:3]]
+            preview = path.read_text(encoding="utf-8")[:200]
+            results.append({"score": score, "filename": path.name, "preview": preview})
+    results.sort(key=lambda x: -x["score"])
+    return results[:3]
 
 
 TOOL_FUNCTIONS = {
-    "search_docs": search_docs,
+    "search_notes": search_notes,
 }
 
 
 # === LLM 이 보는 도구 스키마 ===
 tool_declarations = [
     {
-        "name": "search_docs",
+        "name": "search_notes",
         "description": (
-            "사내 위키에서 키워드로 관련 문서를 검색한다. "
-            "회사 정책·규정·복지 관련 질문에 반드시 사용."
+            "notes/ 폴더에서 키워드로 관련 노트를 검색해 매칭 파일과 미리보기를 반환한다. "
+            "회사 정책·회의록·온보딩 등 사내 문서에 대한 질문에 반드시 사용."
         ),
         "parameters": {
             "type": "object",
             "properties": {
-                "query": {
+                "keyword": {
                     "type": "string",
-                    "description": "검색 키워드 (예: '연차 신입사원', '재택')",
+                    "description": "검색 키워드 (예: '연차 신입', '재택')",
                 },
             },
-            "required": ["query"],
+            "required": ["keyword"],
         },
     },
 ]
 
 
-# === 시스템 프롬프트: 에이전트의 역할 + 할루시네이션 방지 ===
+# === 시스템 프롬프트: grounding 강제 ===
 # TODO (2): 시스템 프롬프트를 직접 작성해보세요.
 #   생각해볼 거리: 이 프롬프트가 없으면 LLM 이 어떻게 답할까? (할루시네이션 위험)
 #   포인트 두 가지:
-#     ① search_docs 로 먼저 검색하라
+#     ① search_notes 로 먼저 검색하라
 #     ② 검색 결과에 없는 내용은 추측하지 말고 "문서에 없습니다" 라고 답하라
 #   예시 (그대로 써도 되고, 본인 톤으로 바꿔도 됩니다):
-#     "당신은 회사 내부 위키를 검색해서 직원 질문에 답하는 도우미입니다. "
-#     "정책·규정·복지에 관한 질문은 반드시 search_docs 로 먼저 검색한 뒤, "
+#     "당신은 사내 노트를 검색해서 직원 질문에 답하는 도우미입니다. "
+#     "정책·규정·회의록에 관한 질문은 반드시 search_notes 로 먼저 검색한 뒤, "
 #     "검색 결과에 근거해서만 답하세요. "
 #     "검색 결과에 없는 내용은 추측하지 말고 '문서에 없습니다' 라고 답하세요."
 SYSTEM_INSTRUCTION = ___
@@ -144,7 +114,8 @@ for turn in range(1, MAX_TURNS + 1):
     for fc in function_calls:
         print(f"[도구 요청] {fc.name}({dict(fc.args)})")
         result = TOOL_FUNCTIONS[fc.name](**fc.args)
-        print(f"[결과]      {result}")
+        preview = str(result).replace("\n", " ")[:120]
+        print(f"[결과]      {preview}{'…' if len(str(result)) > 120 else ''}")
         tool_response_parts.append({
             "function_response": {
                 "name": fc.name,

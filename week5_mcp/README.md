@@ -12,7 +12,7 @@
 ## 회차 끝나면 답할 수 있어야 하는 질문
 
 1. MCP 가 왜 필요한가? 지금까지 도구를 코드에 박아둔 것의 문제는?
-2. `rag.py` 의 `search_docs` 와 `mcp_server.py` 의 `search_docs` 의 차이를 코드로 짚을 수 있는가?
+2. `rag.py` 의 `search_notes` 와 `mcp_server.py` 의 `search_notes` 의 차이를 코드로 짚을 수 있는가?
 3. Claude Desktop 이 우리 서버를 어떻게 찾고 호출하나?
 4. 본인 업무 도구를 MCP 서버로 만드는 길이 머리에 그려지는가?
 
@@ -20,16 +20,16 @@
 
 ## 무엇을 만들 건가
 
-**(1) MCP 서버** — `rag.py` 의 `search_docs` 를 MCP 표준으로 노출
+**(1) MCP 서버** — `rag.py` 의 `search_notes` 를 MCP 표준으로 노출
 **(2) Claude Desktop 등록** — 실제 클라이언트에서 우리 서버 사용
 
 사용 흐름:
 ```
 사용자 (Claude Desktop) → 자연어 질문
 ↓
-Claude (LLM) → company-wiki 서버 호출
+Claude (LLM) → notes-agent 서버 호출
 ↓
-우리 mcp_server.py → search_docs("연차 신입") → 결과 반환
+우리 mcp_server.py → search_notes("연차 신입") → 결과 반환
 ↓
 Claude → 결과 기반으로 자연어 답변
 ```
@@ -42,12 +42,12 @@ Claude → 결과 기반으로 자연어 답변
 도구를 **외부 클라이언트에 표준 단자로 노출** 해서, 우리 코드 없이도 Claude Desktop 같은 도구가 그 도구를 부를 수 있게.
 
 **2. 어떤 구조?**
-`rag.py` 의 `search_docs` 함수 + 두 줄 추가:
+`rag.py` 의 `search_notes` 함수 + 두 줄 추가:
 ```python
-mcp = FastMCP("company-wiki")    # 서버 인스턴스
+mcp = FastMCP("notes-agent")    # 서버 인스턴스
 
 @mcp.tool()                       # 함수를 도구로 노출하는 데코레이터
-def search_docs(query): ...
+def search_notes(query): ...
 ```
 **다른 코드는 거의 없음.** 도구 함수 자체는 `rag.py` 와 동일.
 
@@ -75,7 +75,7 @@ python mcp_server.py
 ⚠️ 실행하면 **출력 없이 멈춰 있는 것처럼 보임** — 정상이에요. stdio 로 클라이언트의 연결을 기다리는 상태. `Ctrl+C` 로 종료.
 
 TODO 두 개:
-- `mcp = FastMCP("company-wiki")` 인스턴스 생성
+- `mcp = FastMCP("notes-agent")` 인스턴스 생성
 - `@mcp.tool()` 데코레이터 추가
 
 **생각해볼 거리**:
@@ -85,9 +85,9 @@ TODO 두 개:
 ### (2) `rag.py` ↔ `mcp_server.py` 비교
 
 두 파일을 나란히 열어 차이를 봐보세요:
-- `search_docs` 함수: **완전 동일**
-- `DOCS` 데이터: **완전 동일**
+- `search_notes` 함수 본문: **완전 동일** (notes/ 폴더 검색 + 점수 계산)
 - 차이: `FastMCP` 객체 + `@mcp.tool()` 데코레이터 두 줄
+- 추가로 W3 의 `tool_declarations` (15줄짜리 스키마) 가 필요 없어짐 — 데코레이터가 자동 생성
 
 → "MCP 화는 두 줄로 끝" 이라는 단순함 체감.
 
@@ -109,7 +109,7 @@ Windows:
 ```json
 {
   "mcpServers": {
-    "company-wiki": {
+    "notes-agent": {
       "command": "C:\\Users\\이름\\Dropbox\\github\\lg-agent-class-2026\\.venv\\Scripts\\python.exe",
       "args": ["C:\\Users\\이름\\Dropbox\\github\\lg-agent-class-2026\\week5_mcp\\mcp_server.py"]
     }
@@ -121,7 +121,7 @@ macOS:
 ```json
 {
   "mcpServers": {
-    "company-wiki": {
+    "notes-agent": {
       "command": "/Users/이름/lg-agent-class-2026/.venv/bin/python3",
       "args": ["/Users/이름/lg-agent-class-2026/week5_mcp/mcp_server.py"]
     }
@@ -132,13 +132,13 @@ macOS:
 ⚠️ **반드시 venv 안의 python** (시스템 python 이면 mcp 패키지 못 찾음)
 ⚠️ Windows JSON 의 `\` → `\\` 두 개
 
-**(d) Claude Desktop 완전 재시작** → 도구 아이콘에 `company-wiki` 가 보이면 성공.
+**(d) Claude Desktop 완전 재시작** → 도구 아이콘에 `notes-agent` 가 보이면 성공.
 
 **(e) 테스트 프롬프트**:
 ```
 신입사원인데 연차 언제부터 쓸 수 있어?
 ```
-→ Claude 가 `search_docs` 호출 → 우리 mcp_server 응답 → Claude 의 자연어 답변.
+→ Claude 가 `search_notes` 호출 → 우리 mcp_server 응답 → Claude 의 자연어 답변.
 
 ### (4) 본인 도구 MCP 화 (선택 — 시간 남으면)
 
@@ -167,7 +167,7 @@ Claude Desktop 설정에 추가하면 본인 업무용 에이전트 완성.
 ```
 W1: hello.py        client.models.generate_content(...)
 W2: agent_loop.py   + 도구 + while 루프  ← 에이전트의 정체
-W3: rag.py          도구만 search_docs 로 교체
+W3: rag.py          도구만 search_notes 로 교체
 W4: langchain       우리 골격 = LangChain create_react_agent 한 줄
 W5: mcp_server.py   데코레이터 한 줄로 표준 도구화
 ```
