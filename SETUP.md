@@ -1,7 +1,7 @@
 # 환경 셋업 가이드
 
 이 문서는 **강의 첫 회차 전에 미리 끝내고 오는 사전 자료**입니다.
-끝까지 따라 하면 마지막에 `python hello.py` 가 정상 동작하는 것까지 확인합니다.
+끝까지 따라 하면 마지막에 `python check_setup.py` 가 정상 동작하는 것까지 확인합니다.
 
 총 소요 시간: 약 20~30분.
 
@@ -142,12 +142,24 @@ GEMINI_API_KEY=AIzaSy...본인키...
 
 ## 6. 동작 확인
 
-```bash
-python hello.py
-```
-(Mac 은 `python3 hello.py`)
+프로젝트 루트의 환경 점검 스크립트를 실행합니다:
 
-Gemini 응답이 한 줄 출력되면 **기본 환경 셋업 완료** 🎉
+```bash
+python check_setup.py
+```
+(Mac 은 `python3 check_setup.py`)
+
+다음과 같이 출력되면 **기본 환경 셋업 완료** 🎉:
+
+```
+[OK] 패키지 import
+[OK] .env 의 API 키 로드
+[OK] Gemini 응답: 셋업 OK
+
+환경 셋업 완료. 다음 회차 (Week 0) 에서 만나요.
+```
+
+> 실제 강의 코드 (`hello.py` 등) 는 `week1_llm/`, `week2_agent/` ... 같은 회차 폴더 안에 있고, 강의 시간에 함께 채워나갑니다.
 
 ---
 

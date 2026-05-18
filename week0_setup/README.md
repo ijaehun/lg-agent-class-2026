@@ -6,7 +6,7 @@
 ## 이번 시간에 할 것
 
 1. **환경 점검** (사전에 `SETUP.md` 따라온 분 기준)
-   - `python hello.py` 가 실제로 응답을 받아오는지 확인
+   - `python check_setup.py` 가 Gemini 응답을 받아오는지 확인
    - 안 되는 분 — 다 같이 잡고 갑니다
 2. **GitHub Copilot 설치 + 첫 체험**
    - VS Code 에 Copilot 깔기
@@ -16,7 +16,7 @@
 
 ## 마치고 나면 (체크리스트)
 
-- [ ] `.venv` 활성화 상태에서 `python hello.py` 가 동작한다
+- [ ] `.venv` 활성화 상태에서 `python check_setup.py` 가 동작한다
 - [ ] VS Code 의 Copilot 익스텐션이 활성 (오른쪽 아래에 Copilot 아이콘 보임)
 - [ ] `copilot_play.py` 의 주석에서 Copilot 이 코드를 제안한 경험이 있다
 
@@ -25,7 +25,7 @@
 ## (1) 사전 작업 — 강의 전에 끝내고 오세요
 
 `SETUP.md` 의 1~8 단계까지 따라 하면 끝입니다.
-도중에 `python hello.py` 가 응답을 한 줄 출력하는 것까지 (6단계), 그리고 VS Code + Copilot 설치 (7~8단계) 까지 확인해주세요.
+도중에 `python check_setup.py` 가 Gemini 응답을 받아오는 것까지 (6단계), 그리고 VS Code + Copilot 설치 (7~8단계) 까지 확인해주세요.
 
 안 되면 그대로 강의에 와도 됩니다. **다 같이 잡고 가는 시간** 이 회차의 절반입니다.
 
