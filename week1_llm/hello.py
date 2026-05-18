@@ -18,7 +18,8 @@ load_dotenv()
 
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-# TODO (1): 강사가 알려주는 모델명과 프롬프트를 채우세요.
+# TODO (1): 모델명과 프롬프트를 채워보세요.
+#   생각해볼 거리: model 이름은 어떻게 정해질까? 같은 프롬프트도 매번 답이 다를까?
 response = client.models.generate_content(
     model="___",       # 예: "gemini-2.5-flash"
     contents="___",    # 예: "안녕? 한 줄로 자기소개 해줘"
