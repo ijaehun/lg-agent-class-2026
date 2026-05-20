@@ -374,7 +374,7 @@ client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
 # 3. ★ LLM 호출 — 핵심 한 줄
 response = client.models.generate_content(
-    model="gemini-3.5-flash",       # 사용할 모델
+    model="gemini-2.5-flash",       # 사용할 모델
     contents="안녕? 자기소개",      # LLM 에 보낼 프롬프트
 )
 

@@ -14,7 +14,7 @@ from google.genai import types
 
 load_dotenv()
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-MODEL = "gemini-3.5-flash"
+MODEL = "gemini-2.5-flash"
 MAX_TURNS = 5
 
 NOTES_DIR = Path(__file__).parent.parent / "notes"

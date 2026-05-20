@@ -219,7 +219,7 @@ TODO 두 개:
 LangChain (LangGraph) 의 create_react_agent 로 사내 노트 검색 agent 를 짜줘.
 
 요구사항:
-- LLM: langchain_google_genai.ChatGoogleGenerativeAI, gemini-3.5-flash
+- LLM: langchain_google_genai.ChatGoogleGenerativeAI, gemini-2.5-flash
 - 도구: search_notes(keyword) — notes/ 폴더의 .md 파일에서 키워드 검색, @tool 데코레이터
 - system prompt: "사내 노트 검색해서 답하라, 결과에 없으면 '문서에 없습니다'"
 - 사용자 질문: "신입사원 연차 정책 알려줘"

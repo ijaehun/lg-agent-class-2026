@@ -355,7 +355,7 @@ def search_notes(keyword: str) -> list[dict]:
     ...
 
 # 2. LLM
-llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
 # 3. ★ 핵심 한 줄
 agent = create_react_agent(llm, tools=[search_notes], prompt=SYSTEM_PROMPT)
@@ -441,7 +441,7 @@ AIMessage(content='신입사원은 입사 후 6개월 동안...')
 ```
 LangChain (LangGraph) 의 create_react_agent 로 사내 노트
 검색 agent 를 짜줘.
-- LLM: ChatGoogleGenerativeAI, gemini-3.5-flash
+- LLM: ChatGoogleGenerativeAI, gemini-2.5-flash
 - 도구: search_notes — @tool 데코레이터
 - system prompt: "검색해서 답하라, 없으면 '문서에 없습니다'"
 - 사용자 질문: "신입사원 연차 정책 알려줘"

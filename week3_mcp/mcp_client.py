@@ -23,7 +23,7 @@ from mcp.client.stdio import stdio_client
 
 load_dotenv()
 gemini = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-MODEL = "gemini-3.5-flash"
+MODEL = "gemini-2.5-flash"
 MAX_TURNS = 10
 
 

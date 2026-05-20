@@ -24,7 +24,7 @@ def main() -> None:
     try:
         client = genai.Client(api_key=api_key)
         response = client.models.generate_content(
-            model="gemini-3.5-flash",
+            model="gemini-2.5-flash",
             contents="한 줄로 '셋업 OK' 라고 답해줘",
         )
         print(f"[OK] Gemini 응답: {response.text.strip()}")

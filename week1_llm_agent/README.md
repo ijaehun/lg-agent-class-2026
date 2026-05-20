@@ -132,7 +132,7 @@ Python 으로 Gemini 멀티턴 챗봇을 짜줘.
 - .env 에서 GEMINI_API_KEY 로드
 - history 리스트에 user/model 턴 누적, 매번 contents 로 전체 전달
 - "exit" 또는 빈 줄로 종료
-- 모델: gemini-3.5-flash
+- 모델: gemini-2.5-flash
 ```
 
 체크리스트:
