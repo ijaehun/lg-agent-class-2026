@@ -1,19 +1,6 @@
-"""
-W2 + W3 통합 실전판: 노트 도우미 에이전트.
+"""W2 + W3 통합 실전판: 노트 도우미 에이전트 (베이스라인).
 
-W2 의 list_notes / read_note + W3 의 search_notes — 도구 3개가 협업.
-NOTES_DIR 환경변수로 본인 폴더를 가리키게 할 수 있다.
-
-학습 포인트:
-  - 골격은 그대로 (W2 의 agent_loop). 도구만 1개 → 3개로 확장.
-  - ★ 이 파일이 다음 단계의 베이스.
-    본인 업무 도구 (예: 사내 위키 API, 슬랙 검색) 로 TOOL_FUNCTIONS 만 갈아끼우면
-    내 업무용 에이전트가 됨.
-
-실행:
-  python notes_agent.py
-  NOTES_DIR=C:/Users/이름/Dropbox/notes python notes_agent.py   # Windows
-  NOTES_DIR=/Users/이름/Dropbox/notes python3 notes_agent.py    # macOS
+도구 3개 (list, read, search) 가 협업. NOTES_DIR 환경변수로 본인 폴더 가능.
 """
 
 import os
@@ -24,7 +11,7 @@ from google.genai import types
 
 load_dotenv()
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.5-flash"
 MAX_TURNS = 10
 
 DEFAULT_NOTES_DIR = Path(__file__).parent.parent / "notes"
@@ -34,7 +21,6 @@ EXCLUDE_DIR_NAMES = {".venv", "__pycache__", "node_modules", ".git"}
 MAX_FILE_BYTES = 50_000
 
 
-# === 도구 1: 노트 목록 ===
 def list_notes() -> list[str]:
     out = []
     for path in NOTES_DIR.rglob("*"):
@@ -47,7 +33,6 @@ def list_notes() -> list[str]:
     return sorted(out)
 
 
-# === 도구 2: 노트 읽기 ===
 def read_note(filename: str) -> str:
     full = (NOTES_DIR / filename).resolve()
     if not full.is_relative_to(NOTES_DIR):
@@ -61,7 +46,6 @@ def read_note(filename: str) -> str:
     return content
 
 
-# === 도구 3: 키워드 검색 ===
 def search_notes(keyword: str) -> list[dict]:
     results = []
     kw = keyword.lower()
@@ -82,12 +66,11 @@ def search_notes(keyword: str) -> list[dict]:
     return results[:10]
 
 
-# TODO (1): 이름 → 실제 함수 라우팅 딕셔너리를 채우세요.
-#   생각해볼 거리: 이 딕셔너리가 곧 "LLM 이 부른 이름을 우리 함수로 연결" 하는 핵심.
-#     본인 업무 도구로 변형할 때 가장 먼저 손대는 자리.
-#   힌트: {"list_notes": list_notes, "read_note": read_note, "search_notes": search_notes}
-TOOL_FUNCTIONS = ___
-
+TOOL_FUNCTIONS = {
+    "list_notes": list_notes,
+    "read_note": read_note,
+    "search_notes": search_notes,
+}
 
 tool_declarations = [
     {
@@ -119,7 +102,6 @@ tool_declarations = [
     },
 ]
 
-
 SYSTEM_INSTRUCTION = (
     f"당신은 로컬 노트 폴더({NOTES_DIR}) 의 파일을 검색·읽어서 "
     "사용자 질문에 답하는 도우미입니다. "
@@ -138,9 +120,7 @@ config = types.GenerateContentConfig(
 def ask(question: str) -> None:
     history = [{"role": "user", "parts": [{"text": question}]}]
     for turn in range(1, MAX_TURNS + 1):
-        resp = client.models.generate_content(
-            model=MODEL, contents=history, config=config
-        )
+        resp = client.models.generate_content(model=MODEL, contents=history, config=config)
         content = resp.candidates[0].content
         function_calls = [p.function_call for p in content.parts if p.function_call]
 

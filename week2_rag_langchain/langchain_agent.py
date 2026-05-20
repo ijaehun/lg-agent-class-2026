@@ -1,13 +1,10 @@
-"""
-Week 4: LangChain — W3 rag.py 와 같은 일을 한 줄로.
+"""W2 Part 2: LangChain — rag.py 가 한 줄로 (베이스라인).
 
-학습 목표:
-  - W3 rag.py 와 똑같은 결과 (사내 노트 검색 + 답변) 를 LangChain 으로
-  - 우리가 직접 짠 100줄 골격이 = create_react_agent 한 줄 임을 눈으로 본다
-  - "LangChain 도 결국 우리 골격 위의 편의 기능" 이 손에 잡힌다
-
-실행:
-  python langchain_agent.py
+핵심:
+  - rag.py 와 동일한 일을 LangChain (LangGraph) 의 create_react_agent 로
+  - 도구 함수 본문은 그대로. @tool 데코레이터만 추가
+  - LLM 호출 / while 루프 / function_call·response 처리 → 다 LangChain 이 자동
+  - system_instruction → create_react_agent 의 prompt 인자로
 """
 
 import os
@@ -22,14 +19,8 @@ load_dotenv()
 NOTES_DIR = Path(__file__).parent.parent / "notes"
 
 
-# === 도구 정의 ===
-# TODO (1): 아래 함수 위에 LangChain 의 @tool 데코레이터를 추가하세요.
-#   생각해볼 거리: 이 데코레이터가 자동으로 만들어주는 것은?
-#     - 함수 시그니처 → tool schema (W3 에서 직접 작성한 tool_declarations 가 불필요!)
-#     - docstring → tool description
-#   힌트: @tool
-
-___
+# === 도구 정의 (rag.py 의 함수 본문과 동일, @tool 데코레이터만 추가) ===
+@tool
 def search_notes(keyword: str) -> list[dict]:
     """notes 폴더에서 키워드와 매칭되는 파일들을 점수순으로 반환한다.
 
@@ -49,12 +40,12 @@ def search_notes(keyword: str) -> list[dict]:
 
 # === LLM 연결 ===
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash",
     google_api_key=os.environ["GEMINI_API_KEY"],
 )
 
 
-# === 시스템 프롬프트 (W3 의 SYSTEM_INSTRUCTION 과 동일 역할) ===
+# === 시스템 프롬프트 (rag.py 의 SYSTEM_INSTRUCTION 과 동일 역할) ===
 SYSTEM_PROMPT = (
     "당신은 사내 노트를 검색해서 직원 질문에 답하는 도우미입니다. "
     "정책·규정·회의록에 관한 질문은 반드시 search_notes 로 먼저 검색한 뒤, "
@@ -63,11 +54,8 @@ SYSTEM_PROMPT = (
 )
 
 
-# TODO (2): create_react_agent 한 줄로 agent 만들기.
-#   생각해볼 거리: 이 한 줄 안에 W3 rag.py 의 무엇이 들어있을까?
-#     - while 루프? function_call 처리? function_response 형식? MAX_TURNS?
-#   힌트: create_react_agent(llm, tools=[search_notes], prompt=SYSTEM_PROMPT)
-agent = ___
+# === ★ 이 한 줄이 rag.py 의 agent loop 전체에 해당 ===
+agent = create_react_agent(llm, tools=[search_notes], prompt=SYSTEM_PROMPT)
 
 
 if __name__ == "__main__":

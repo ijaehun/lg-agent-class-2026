@@ -1,13 +1,12 @@
-"""
-Step 6: MCP 서버 — W3 rag.py 의 search_notes 를 MCP 표준으로 노출.
+"""W3: MCP 서버 — rag.py 의 search_notes 를 MCP 표준으로 노출 (베이스라인).
 
-학습 목표:
-  - W3 rag.py 의 search_notes 와 함수 본문은 완전히 동일
+핵심:
+  - rag.py 의 search_notes 와 함수 본문은 완전히 동일
   - 바뀐 것은 단 두 줄:
       ① FastMCP 객체 생성
       ② @mcp.tool() 데코레이터
   - 이 두 줄이 "내 도구를 Claude Desktop / Cursor 등 어떤 MCP 클라이언트에도
-    꽂을 수 있게 만드는" 표준 어댑터 (= USB-C).
+    꽂을 수 있게 만드는" 표준 어댑터 (= USB-C)
 
 실행:
   python mcp_server.py
@@ -23,18 +22,15 @@ from mcp.server.fastmcp import FastMCP
 NOTES_DIR = Path(__file__).parent.parent / "notes"
 
 
-# TODO (1): MCP 서버 인스턴스를 생성하세요.
-#   생각해볼 거리: 서버 이름 ("notes-agent") 은 클라이언트 (Claude Desktop) 에서 보임.
-#     본인 도구를 MCP 화 할 때 어떤 이름을 줄지?
-#   힌트: mcp = FastMCP("notes-agent")
-___
+# === [1] MCP 서버 인스턴스 ===
+# 서버 이름 ("notes-agent") 은 Claude Desktop 등 클라이언트에서 보임
+mcp = FastMCP("notes-agent")
 
 
-# TODO (2): 아래 search_notes 함수를 MCP 도구로 등록하는 데코레이터를 추가하세요.
-#   생각해볼 거리: 이 한 줄이 자동으로 만드는 것 — 도구 스키마 (W3 의 tool_declarations 불필요!)
-#     함수 시그니처 + docstring → MCP 표준 스키마
-#   힌트: 함수 정의 바로 위에 @mcp.tool()
-@___
+# === [2] @mcp.tool() — 함수를 MCP 도구로 자동 등록 ===
+# 함수 시그니처 + docstring → MCP 표준 스키마 자동 생성
+# (rag.py 의 tool_declarations 가 더 이상 필요 없음)
+@mcp.tool()
 def search_notes(keyword: str) -> list[dict]:
     """notes 폴더에서 키워드와 매칭되는 파일들을 점수순으로 반환한다.
 
