@@ -33,4 +33,4 @@ data/local/
 # Instructor-only (학생 repo 에 미공개)
 CLAUDE.md
 solutions/
-lessons/
+lessons/*_cheatsheet.md
