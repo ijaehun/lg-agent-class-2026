@@ -353,7 +353,6 @@ Gemini API 로 RAG 에이전트 짜줘.
 
 **비교** — Copilot 답이 베이스라인과 같은가?
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -396,7 +395,6 @@ NOTES_DIR=/Users/본인/문서폴더 python3 notes_agent.py
 - `system_instruction` 톤 바꾸기 (격식체 / 친근체)
 - 검색 점수 알고리즘 개선 (단순 매칭 → 가중치)
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출
 
 ---
 
@@ -480,7 +478,6 @@ LangChain (LangGraph) 의 create_react_agent 로 사내 노트 검색 agent 짜�
 
 **비교** — Copilot 답이 베이스라인과 같은가?
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -543,7 +540,6 @@ W1 의 `agent_skill.py` 또는 본인 만든 도구를 LangChain 으로 변환
 - 여러 도구 동시 등록 (list + read + search + 본인 도구)
 - `prompt` 변경해서 LLM 행동 바꿔보기
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출
 
 ---
 

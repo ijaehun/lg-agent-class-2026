@@ -400,7 +400,6 @@ Gemini API 로 한 번 LLM 호출하는 간단한 스크립트 짜줘.
 
 **비교** — Copilot 답이 베이스라인과 같은가? 다르면 어디?
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -463,7 +462,6 @@ Gemini API 로 멀티턴 챗봇을 짜줘.
 - Copilot 답이 베이스라인과 같은가?
 - 다르면 어디가 다른가? 동작은 같은가?
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -479,7 +477,6 @@ Gemini API 로 멀티턴 챗봇을 짜줘.
 
 **진행** — 기능 선택 → Copilot 구현 → 결과 공유
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -796,7 +793,6 @@ Gemini API 로 에이전트 (agent loop) 짜줘.
 
 **비교** — Copilot 답이 베이스라인과 같은가? 동작은?
 
-> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -878,7 +874,7 @@ agent_loop.py (list_notes + read_note 도구) 위에 search_notes 도구 추가�
 1. 함수 작성 (Copilot 활용 OK)
 2. `agent_loop.py` 에 등록 (`TOOL_FUNCTIONS` + `tool_declarations`)
 3. "지금 몇 시야?" 같은 질문으로 실행
-4. 결과 공유 → **[Live Code Share](http://3.38.129.150/)**
+4. 결과 공유
 
 > 본인 도구 자유 시도 OK (예: `count_files`, `search_emails`)
 
