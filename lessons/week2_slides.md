@@ -78,7 +78,6 @@ style: |
     color: #444;
     border-radius: 0 6px 6px 0;
   }
-  /* Roadmap boxes */
   .roadmap {
     display: flex;
     align-items: center;
@@ -129,15 +128,68 @@ style: |
     font-size: 26px;
     color: #999;
   }
+  .week-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 20px 0;
+  }
+  .part-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .part-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1a73e8;
+    padding: 6px 14px;
+    background: #e8f0fe;
+    border-radius: 6px;
+    align-self: flex-start;
+  }
+  .part-sub {
+    font-size: 15px;
+    color: #555;
+    padding-left: 14px;
+    margin-top: -4px;
+  }
+  .files-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    padding-left: 8px;
+  }
+  .file-box {
+    padding: 10px 12px;
+    border: 2px solid #1a73e8;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+    text-align: center;
+    min-width: 120px;
+  }
+  .file-name {
+    display: block;
+    font-family: 'JetBrains Mono', 'D2Coding', 'Consolas', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d93025;
+  }
+  .file-desc {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+  }
 ---
 
 <!-- _class: lead -->
 <!-- _paginate: false -->
 
 # Week 2
-## RAG 심화 + LangChain
-
-W1 골격 → 한 단계 더 + 한 줄로
+## 나만의 에이전트 만들기
 
 ---
 
@@ -147,7 +199,7 @@ W1 골격 → 한 단계 더 + 한 줄로
   <div class="step">
     <span class="num">W1</span>
     <span class="title">LLM + 에이전트</span>
-    <span class="sub">+ RAG 맛</span>
+    <span class="sub">기본</span>
   </div>
   <div class="arrow">→</div>
   <div class="step current">
@@ -163,38 +215,51 @@ W1 골격 → 한 단계 더 + 한 줄로
   </div>
 </div>
 
-지난주 우리는 `agent_skill.py` 로 **RAG 의 본질** 을 봤죠.
-오늘은 그 위에 두 가지: **grounding + LangChain 한 줄.**
+W1 의 에이전트 위에 **grounding (RAG) + 추상화 (LangChain)** 추가
 
 ---
 
-# 오늘 끝나면 답할 수 있어야
+# 오늘의 학습 흐름
 
-1. W1 의 `agent_skill.py` 와 `rag.py` 의 차이를 코드로 짚을 수 있나?
-2. `system_instruction` 이 없으면 LLM 이 어떻게 답할까?
-3. `create_react_agent` **한 줄 안에서 일어나는 일** 을 본인 입으로 설명할 수 있는가?
-4. LangChain 을 쓰면 좋은 상황 / 직접 짜면 좋은 상황은?
-5. Copilot 한테 LangChain agent 짜달라고 했을 때, 답이 옳은지 평가할 수 있는가?
+<div class="week-flow">
+  <div class="part-row">
+    <div class="part-title">📘 Part 1 — RAG 심화</div>
+    <div class="part-sub">검색 결과에 근거한 답변 (할루시네이션 방지)</div>
+    <div class="files-row">
+      <div class="file-box">
+        <span class="file-name">rag.py</span>
+        <span class="file-desc">검색 + grounding</span>
+      </div>
+      <div class="arrow">→</div>
+      <div class="file-box">
+        <span class="file-name">notes_agent.py</span>
+        <span class="file-desc">실전 (도구 3개)</span>
+      </div>
+    </div>
+  </div>
 
-★ **3번이 가장 중요** — "한 줄 안의 정체" 를 알아야 LangChain 을 진짜 쓰는 것.
+  <div class="part-row">
+    <div class="part-title">🔗 Part 2 — LangChain</div>
+    <div class="part-sub">우리 골격을 한 줄로 추상화</div>
+    <div class="files-row">
+      <div class="file-box">
+        <span class="file-name">langchain_agent.py</span>
+        <span class="file-desc">create_react_agent</span>
+      </div>
+    </div>
+  </div>
+</div>
 
 ---
 
-<!-- _class: lead -->
+# 오늘의 학습 목표
 
-# 오늘 진행 방식
+1. W1 에이전트의 한계 — 할루시네이션이 왜 생기는가
+2. `system_instruction` 한 줄로 어떻게 막는가 (RAG 의 본질)
+3. LangChain `create_react_agent` 한 줄 안에서 일어나는 일
+4. 우리 골격 ↔ LangChain — 같은 일을 어떻게 추상화하는가
 
-지난주와 **같은 4단계**:
-
-| | 단계 | 무엇을 |
-|---|---|---|
-| **1** | **구조** | 그림으로 — system_instruction / LangChain 한 줄의 의미 |
-| **2** | **손코딩** | TODO 채우기 + **망가뜨려보기** |
-| **3** | **Copilot** | 같은 LangChain agent 시켜보기 |
-| **4** | **해석** | 받은 코드 평가 — 우리 골격 ↔ LangChain 비교 |
-
-> 오늘은 손코딩이 짧음 — 개념이 W1 의 확장이라.
-> 대신 **비교 + 평가** 에 시간 많이.
+★ 핵심 — **에이전트 골격은 같음. 추상화 / 강제만 추가.**
 
 ---
 
@@ -204,14 +269,14 @@ W1 골격 → 한 단계 더 + 한 줄로
 
 `rag.py` + `notes_agent.py`
 
-W1 의 `agent_skill.py` 위에 **`system_instruction` 한 줄**.
-그게 grounding (할루시네이션 방지).
+검색 + `system_instruction` 으로 grounding 강제
 
 ---
 
-# W1 의 한계 — 할루시네이션은 막을 수 없음
+# W1 에이전트의 한계 — 할루시네이션
 
 W1 의 `agent_skill.py`:
+
 - 검색 도구 (`search_notes`) 있음
 - 근데 LLM 이 **검색 안 하고 그냥 답할 수도 있음**
 - 검색 결과 없으면 **추측해서 답할 수도** = 할루시네이션
@@ -222,7 +287,7 @@ W1 의 `agent_skill.py`:
 Model: 일반적으로 신입사원은 3개월 후부터 연차를...   ← 추측!
 ```
 
-> 이걸 어떻게 강제할까? → **`system_instruction` 한 줄.**
+→ **`system_instruction` 한 줄로 강제** 필요
 
 ---
 
@@ -244,54 +309,57 @@ config = types.GenerateContentConfig(
 )
 ```
 
-> **이 한 줄이 RAG 의 두 번째 본질** — 검색 결과에 **근거** 하라는 강제.
+> **이 한 줄이 RAG 의 두 번째 본질** — 검색 결과에 **근거** 하라는 강제
 
 ---
 
-# `rag.py` 분해 — 골격은 W1 과 동일
+# `rag.py` — 검색 + grounding
 
 ```python
-# 도구 — search_notes (W1 과 동일하지만 점수 계산 추가)
 def search_notes(keyword: str) -> list[dict]:
-    """notes/ 폴더에서 keyword 매칭 + 점수순 정렬"""
+    """notes/ 에서 keyword 매칭 + 점수순 상위 3개 반환."""
     ...
 
-# ★ 새로 추가: system_instruction
 SYSTEM_INSTRUCTION = "검색 결과에 근거해 답하라..."
 
 config = types.GenerateContentConfig(
     tools=[types.Tool(function_declarations=[search_notes_declaration])],
-    system_instruction=SYSTEM_INSTRUCTION,
+    system_instruction=SYSTEM_INSTRUCTION,    # ← 핵심
 )
 
-# Agent loop — W1 과 100% 동일 (30줄)
+# Agent loop — W1 agent_loop 와 100% 동일 (30줄)
 for turn in range(MAX_TURNS):
     ...
 ```
 
-> **W1 agent_skill.py 와 다른 줄**: `system_instruction` 한 줄.
+> **W1 `agent_skill.py` 와 다른 줄** = `system_instruction` 한 줄.
 > agent loop 본문은 **안 변함.**
 
 ---
 
-# ★ 망가뜨려보기 — system_instruction 의 힘
+# Copilot 으로 직접 짜보기 — RAG
 
-| 망가뜨릴 곳 | 결과 |
-|---|---|
-| `SYSTEM_INSTRUCTION` 을 `""` 로 | LLM 이 검색 안 하고 추측해서 답할 수도 |
-| `search_notes` description 을 `""` 로 | LLM 이 도구를 안 부름 |
-| `search_notes` 가 빈 리스트 반환 | LLM 이 "문서에 없습니다" 답해야 옳음 — 실제 그런지 확인 |
+베이스라인 (`rag.py`) 본 후 → Copilot 으로 같은 RAG 짜보기
 
-→ 같은 질문에 system_instruction **있을 때 vs 없을 때** 답이 어떻게 달라지나?
+**Copilot 프롬프트 예시**
 
-> system_instruction = **약속 + 강제**.
-> LLM 한테 "이렇게 행동해" 라고 명시.
+```
+Gemini API 로 RAG 에이전트 짜줘.
+- search_notes(keyword) 도구 — notes/ 폴더에서 키워드 매칭
+- system_instruction 으로 "검색 결과에만 근거해 답하라" 강제
+- agent loop (while + function_call 처리)
+- 모델: gemini-2.5-flash
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
-# 실전 — `notes_agent.py`
+# `notes_agent.py` — 실전 (도구 3개 통합)
 
-도구 3개 통합 (`list_notes`, `read_note`, `search_notes`)
+W1 의 `list_notes` + `read_note` + `search_notes` 통합
 
 ```python
 TOOL_FUNCTIONS = {
@@ -300,71 +368,119 @@ TOOL_FUNCTIONS = {
     "search_notes": search_notes,
 }
 
-# system_instruction + tool_declarations 3개
-# 환경변수로 본인 폴더 지정 가능
+# 본인 폴더로 NOTES_DIR 변경 가능
 NOTES_DIR = Path(os.environ.get("NOTES_DIR", str(DEFAULT_NOTES_DIR)))
 ```
 
-본인 폴더로 실행:
+질문 예시 (LLM 이 알아서 적절한 도구 선택):
+- "출장비 정산 어떻게?" → `search_notes`
+- "policy_remote.md 보여줘" → `read_note`
+- "내 노트에 뭐 있어?" → `list_notes`
+
+---
+
+# Part 1 확장 실습 — 본인 폴더로
+
+`NOTES_DIR` 환경변수로 본인 폴더 지정 → 본인 노트로 RAG 실험
+
 ```powershell
+# Windows
 $env:NOTES_DIR="C:\본인\문서폴더"; python notes_agent.py
+
+# macOS
+NOTES_DIR=/Users/본인/문서폴더 python3 notes_agent.py
 ```
 
-→ "내 진짜 노트" 로 실험. **LLM 이 알아서 적절한 도구 골라 부름.**
+**확장 아이디어**
+- 본인 메모 / 회의록 폴더로 변경
+- `system_instruction` 톤 바꾸기 (격식체 / 친근체)
+- 검색 점수 알고리즘 개선 (단순 매칭 → 가중치)
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출
+
+---
+
+# Part 1 정리
+
+RAG 심화 완료
+
+- `rag.py` — 검색 + `system_instruction` 으로 grounding
+- `notes_agent.py` — 도구 3개 통합 실전
+- 확장 실습 — 본인 폴더로 RAG 적용
+
+> Part 2 에서 — 같은 일을 **LangChain 한 줄로**
 
 ---
 
 <!-- _class: lead -->
 
-# 🔗 Part 2 — LangChain 한 줄로
+# 🔗 Part 2 — LangChain
 
 `langchain_agent.py`
 
-Part 1 에서 짠 100줄 = `create_react_agent` **한 줄**.
+Part 1 의 100줄 = `create_react_agent` **한 줄**
 
 ---
 
 # LangChain 이 자동으로 해주는 것
 
-| 우리 (Part 1) | LangChain |
+| Part 1 (직접) | LangChain |
 |---|---|
 | `tool_declarations` 직접 작성 (15줄) | `@tool` 데코레이터 (1줄) |
-| `TOOL_FUNCTIONS` 딕셔너리 | 자동 |
-| `for turn in range(MAX_TURNS)` 루프 | 자동 |
-| `function_calls` 추출 | 자동 |
-| 종료 조건 `if not function_calls: break` | 자동 |
-| `function_response` 형식 | 자동 |
-| `history.append(...)` | 자동 |
+| `TOOL_FUNCTIONS` dict | 자동 |
+| `for turn in range(MAX_TURNS)` | 자동 |
+| `function_call` 추출 | 자동 |
+| 종료 조건 / `function_response` 형식 | 자동 |
 | `system_instruction` | `prompt=` 인자로 |
 
-→ **Part 1 에 한 줄씩 짠 모든 것이 자동.**
+→ Part 1 에 한 줄씩 짠 모든 것이 **자동화**
 
 ---
 
-# `langchain_agent.py` 분해 — 한 줄
+# `langchain_agent.py` — 핵심 한 줄
 
 ```python
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.prebuilt import create_react_agent
 from langchain_core.tools import tool
 
-# 1. ★ 도구 — @tool 데코레이터만 (스키마 자동 생성)
+# [1] 도구 — @tool 데코레이터만 (스키마 자동 생성)
 @tool
 def search_notes(keyword: str) -> list[dict]:
     """notes/ 에서 keyword 검색"""
     ...
 
-# 2. LLM
+# [2] LLM
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 
-# 3. ★ 핵심 한 줄
+# [3] ★ 핵심 한 줄
 agent = create_react_agent(llm, tools=[search_notes], prompt=SYSTEM_PROMPT)
 
-# 4. 실행
+# [4] 실행
 result = agent.invoke({"messages": [("user", "신입 연차 정책?")]})
 ```
 
-> **3번 한 줄** 안에 Part 1 의 30줄 agent loop 가 들어있음.
+> **3번 한 줄** 안에 Part 1 의 30줄 agent loop 가 들어있음
+
+---
+
+# Copilot 으로 직접 짜보기 — LangChain
+
+베이스라인 (`langchain_agent.py`) 본 후 → Copilot 으로 같은 코드 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+LangChain (LangGraph) 의 create_react_agent 로 사내 노트 검색 agent 짜줘.
+- LLM: langchain_google_genai.ChatGoogleGenerativeAI, gemini-2.5-flash
+- 도구: search_notes(keyword) — @tool 데코레이터
+- system prompt: "검색해서 답하라, 없으면 '문서에 없습니다'"
+- agent.invoke 로 실행 + result["messages"] 출력
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
@@ -375,27 +491,11 @@ result = agent.invoke({"messages": [("user", "신입 연차 정책?")]})
 | 도구 스키마 | `tool_declarations` (15줄) | `@tool` (1줄) |
 | TOOL_FUNCTIONS | dict 직접 | 없음 |
 | while 루프 | `for turn in range(...)` | 없음 |
-| function_call 추출 | 직접 | 없음 |
 | 종료 조건 | `if not function_calls: break` | 없음 |
 | function_response | 직접 dict 작성 | 없음 |
 | system 강제 | `system_instruction=` | `prompt=` |
 
-**100줄 → 30줄. 핵심 한 줄 = `create_react_agent`.**
-
----
-
-# ★ 망가뜨려보기 — LangChain 도 약속 위에서 동작
-
-| 망가뜨릴 곳 | 결과 |
-|---|---|
-| `@tool` 데코레이터 제거 | `create_react_agent` 가 도구 인식 못 함 |
-| docstring 빈 문자열 | LLM 이 도구가 뭐 하는지 몰라 안 부름 |
-| `prompt=` 빼기 | LLM 이 검색 안 하고 추측해서 답할 수도 |
-
-→ "LangChain 도 결국 약속된 형식 위에서 동작" 이라는 본질 체감.
-
-> docstring = LangChain 에서의 description.
-> `@tool` 데코레이터 = `tool_declarations` 자동 생성기.
+**100줄 → 30줄**. 핵심 한 줄 = `create_react_agent`
 
 ---
 
@@ -416,8 +516,7 @@ ToolMessage(content='[{"file":"policy_leave.md","preview":"..."}]')
 AIMessage(content='신입사원은 입사 후 6개월 동안...')
 ```
 
-> **Part 1 에 print 로 찍던 것 = LangChain 의 messages.**
-> 본질은 같음 — turn 별 메시지 리스트.
+> Part 1 에 print 로 찍던 것 = LangChain 의 messages
 
 ---
 
@@ -427,40 +526,43 @@ AIMessage(content='신입사원은 입사 후 6개월 동안...')
 - 커스터마이징 때 결정적 차이 (예: 도구 결과 후처리, 토큰 절약)
 - **Copilot 한테 시켜도 답이 옳은지 평가** 가능
 
-> "LangChain 을 쓰는 사람" vs "**LangChain 의 정체를 아는 사람**".
-> 두 번째가 5주의 목적.
+> "LangChain 을 쓰는 사람" vs "**LangChain 의 정체를 아는 사람**"
 
 ---
 
-<!-- _class: lead -->
+# Part 2 확장 실습 — 본인 도구를 LangChain 으로
 
-# Copilot 한테 LangChain agent 시키기
+W1 의 `agent_skill.py` 또는 본인 만든 도구를 LangChain 으로 변환
 
-빈 `my_lc_agent.py` → 프롬프트:
+**과제**
+- `@tool` 데코레이터로 본인 도구 감싸기
+- `create_react_agent(llm, tools=[본인 도구], prompt=...)` 등록
+- `result["messages"]` 출력으로 흐름 확인
 
-```
-LangChain (LangGraph) 의 create_react_agent 로 사내 노트
-검색 agent 를 짜줘.
-- LLM: ChatGoogleGenerativeAI, gemini-2.5-flash
-- 도구: search_notes — @tool 데코레이터
-- system prompt: "검색해서 답하라, 없으면 '문서에 없습니다'"
-- 사용자 질문: "신입사원 연차 정책 알려줘"
-```
+**확장 아이디어**
+- 여러 도구 동시 등록 (list + read + search + 본인 도구)
+- `prompt` 변경해서 LLM 행동 바꿔보기
 
-**짝꿍과 비교 — 체크리스트는 이제 너희가 만든다**:
-- 어떤 줄이 핵심? 어떤 줄이 부속?
-- Copilot 답에 빠진 게 있나? 추가된 게 있나?
-- 우리 솔루션과 비교해서 어느 게 더 옳은가?
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출
+
+---
+
+# Part 2 정리
+
+LangChain 추상화 완료
+
+- `langchain_agent.py` — `create_react_agent` 한 줄
+- 줄 단위 비교 — 우리 100줄이 어떻게 한 줄에 들어갔는지
+- 확장 실습 — 본인 도구를 LangChain 으로
+
+> W3 에서 — 도구를 **외부에 표준으로** 노출 (MCP)
 
 ---
 
 # 오늘 핵심 두 줄
 
-1. **`system_instruction` 한 줄 = 할루시네이션 강제 차단**
-   (W1 에서 본 RAG 의 본질을 강하게)
-
-2. **`create_react_agent` 한 줄 = 우리 골격 100줄의 자동화**
-   (LangChain 의 가치 = 추상화. 우리 가치 = 그 정체를 안다는 것)
+1. **`system_instruction` 한 줄** = 할루시네이션 차단 (RAG 의 본질)
+2. **`create_react_agent` 한 줄** = 우리 100줄의 자동화 (LangChain 의 본질)
 
 ---
 
@@ -468,11 +570,11 @@ LangChain (LangGraph) 의 create_react_agent 로 사내 노트
 
 # 다음 주 예고 — W3 MCP
 
-지금까지: 도구를 **우리 코드 안** 에 박았음.
+지금까지: 도구가 **우리 코드 안** 에 있었음
 
-**W3 = 도구를 외부에 표준으로 노출.**
+**W3** = 도구를 **외부에 표준으로** 노출
 
-`@mcp.tool()` 데코레이터 **한 줄** + Claude Desktop 등록 → 우리 노트 검색 도구를 **Claude Desktop 에서 직접 사용.**
+`@mcp.tool()` 데코레이터 한 줄 + Claude Desktop 등록
+→ 우리 검색 도구를 **Claude Desktop 에서 직접 사용**
 
-> "MCP = 도구의 USB-C."
-> 우리가 만든 검색 도구를 **다른 클라이언트 (Claude Desktop, Cursor) 도 쓸 수 있게.**
+> "MCP = 도구의 USB-C"

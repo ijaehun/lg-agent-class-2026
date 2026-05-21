@@ -78,7 +78,6 @@ style: |
     color: #444;
     border-radius: 0 6px 6px 0;
   }
-  /* Roadmap boxes */
   .roadmap {
     display: flex;
     align-items: center;
@@ -135,9 +134,7 @@ style: |
 <!-- _paginate: false -->
 
 # Week 3
-## MCP — 도구의 표준 단자
-
-마지막 회차 · **종강**
+## 나만의 에이전트 만들기 — 마지막
 
 ---
 
@@ -147,7 +144,7 @@ style: |
   <div class="step">
     <span class="num">W1</span>
     <span class="title">LLM + 에이전트</span>
-    <span class="sub">RAG 맛</span>
+    <span class="sub">기본</span>
   </div>
   <div class="arrow">→</div>
   <div class="step">
@@ -163,19 +160,19 @@ style: |
   </div>
 </div>
 
-지금까지: 도구가 **우리 코드 안** 에 있었음.
-오늘: 도구를 **외부에 표준으로** 노출. 다른 클라이언트도 사용 가능.
+지금까지: 도구가 **우리 코드 안** 에 있었음
+오늘: 도구를 **외부에 표준으로** 노출 — 다른 클라이언트도 사용
 
 ---
 
-# 오늘 끝나면 답할 수 있어야
+# 오늘의 학습 목표
 
-1. MCP 가 왜 필요한가? 도구를 코드에 박아둔 것의 문제는?
-2. `rag.py` 의 `search_notes` ↔ `mcp_server.py` 의 `search_notes` — **다른 줄이 몇 줄?**
+1. MCP 가 왜 필요한가 — 도구를 코드에 박아둔 것의 문제는?
+2. W2 의 `rag.py` ↔ `mcp_server.py` — 다른 줄이 몇 줄?
 3. Claude Desktop 이 우리 서버를 어떻게 찾고 호출하나?
-4. 본인 업무 도구를 MCP 서버로 만드는 길이 머리에 그려지는가?
+4. **본인 업무 도구를 MCP 서버로 만드는 길이 그려지는가?**
 
-★ 4번이 **종강의 진짜 목표** — 자기 업무로 가져갈 수 있는가.
+★ 4번이 **종강의 진짜 목표** — 자기 업무로 가져갈 수 있는가
 
 ---
 
@@ -192,18 +189,17 @@ style: |
 - 매번 직접 agent loop 돌려야 함
 - 도구 = 코드와 강결합
 
-**MCP** = Model Context Protocol — **도구를 외부에 표준으로 노출.**
+**MCP** = Model Context Protocol — **도구를 외부에 표준으로 노출**
 
-> **USB-C 비유**:
-> 충전기마다 단자 다르면 불편 → USB-C 로 표준화.
-> 도구마다 호출 방식 다르면 불편 → MCP 로 표준화.
+> **USB-C 비유**: 충전기마다 단자 다르면 불편 → USB-C 로 표준화
+> 도구마다 호출 방식 다르면 불편 → **MCP 로 표준화**
 
 ---
 
 # MCP 의 그림
 
 ```
-[Claude Desktop / Cursor / Other Client]
+[Claude Desktop / Cursor / 기타 클라이언트]
             ↓ MCP 프로토콜 (stdio / HTTP)
 [Our MCP Server: mcp_server.py]
             ↓
@@ -215,30 +211,29 @@ style: |
 → **클라이언트는 우리 코드를 몰라도 됨.** 표준 단자만 알면 됨.
 
 지금까지: 우리가 LLM 호출 + 도구 실행 다 함
-**MCP**: 도구만 노출하고 호출은 클라이언트가.
+**MCP**: 도구만 노출하고 호출은 클라이언트가
 
 ---
 
 # 핵심 변화 — 두 줄
 
-`rag.py` 의 `search_notes` 함수를 그대로 + **두 줄만 추가**:
+W2 `rag.py` 의 `search_notes` 함수 그대로 + **두 줄만 추가**:
 
 ```python
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("notes-agent")      # 1. 서버 인스턴스
+mcp = FastMCP("notes-agent")      # ★ 1. 서버 인스턴스
 
-@mcp.tool()                        # 2. 함수를 도구로 노출
+@mcp.tool()                        # ★ 2. 함수를 도구로 노출
 def search_notes(keyword: str) -> list[dict]:
     """notes 에서 keyword 검색"""
     ...
 
 if __name__ == "__main__":
-    mcp.run()                      # 3. 서버 시작 (stdio 대기)
+    mcp.run()                      # ★ 3. 서버 시작 (stdio 대기)
 ```
 
-> **함수 본문은 W2 와 100% 동일.**
-> 데코레이터 한 줄로 표준 도구화.
+> **함수 본문은 W2 와 100% 동일.** 데코레이터 한 줄로 표준 도구화
 
 ---
 
@@ -250,9 +245,9 @@ from mcp.server.fastmcp import FastMCP
 
 NOTES_DIR = Path(__file__).parent.parent / "notes"
 
-mcp = FastMCP("notes-agent")   # ★ 1. 서버 객체
+mcp = FastMCP("notes-agent")   # ★ 서버 객체
 
-@mcp.tool()                     # ★ 2. 데코레이터
+@mcp.tool()                     # ★ 데코레이터
 def search_notes(keyword: str) -> list[dict]:
     """notes 에서 키워드 검색 (회사 정책·회의록·온보딩)."""
     keywords = keyword.lower().split()
@@ -262,11 +257,10 @@ def search_notes(keyword: str) -> list[dict]:
         score = sum(1 for kw in keywords if kw in text)
         if score > 0:
             results.append({"score": score, "filename": path.name, ...})
-    results.sort(key=lambda x: -x["score"])
-    return results[:3]
+    return sorted(results, key=lambda x: -x["score"])[:3]
 
 if __name__ == "__main__":
-    mcp.run()                    # ★ 3. 서버 실행
+    mcp.run()                    # ★ 서버 실행
 ```
 
 ---
@@ -281,7 +275,7 @@ if __name__ == "__main__":
 | `system_instruction` | 우리가 작성 | **없음** (클라이언트가 정의) |
 | 추가된 줄 | — | `FastMCP("...")` + `@mcp.tool()` + `mcp.run()` |
 
-> **MCP 화는 두 줄.** 우리 도구를 외부 클라이언트가 쓸 수 있게.
+> **MCP 화는 두 줄.** 우리 도구를 외부 클라이언트가 쓸 수 있게
 
 ---
 
@@ -294,19 +288,40 @@ python mcp_server.py
 ⚠️ **출력 없이 멈춰 있는 것처럼 보임 — 정상.**
 stdio 로 클라이언트의 연결을 기다리는 상태. `Ctrl+C` 로 종료.
 
-> "서버" 라 응답할 일이 있을 때만 동작. 평소엔 대기.
+> "서버" 라 응답할 일이 있을 때만 동작. 평소엔 대기
+
+---
+
+# Copilot 으로 직접 짜보기 — MCP 서버
+
+베이스라인 (`mcp_server.py`) 본 후 → Copilot 으로 같은 코드 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+FastMCP 로 MCP 서버 짜줘.
+- 서버 이름: "notes-agent"
+- 도구: search_notes(keyword) — notes/ 폴더의 .md 파일에서 키워드 검색
+- @mcp.tool() 데코레이터로 자동 도구 등록
+- if __name__ == "__main__": mcp.run() 로 stdio 대기
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
 
 ---
 
 # Claude Desktop 등록 — 설정 파일
 
 설정 위치:
+
 | OS | 경로 |
 |---|---|
 | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
 | macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
 
-> Claude Desktop 의 `Settings → Developer → Edit Config` 로도 열 수 있음.
+> Claude Desktop 의 `Settings → Developer → Edit Config` 로도 열 수 있음
 
 ---
 
@@ -326,7 +341,7 @@ stdio 로 클라이언트의 연결을 기다리는 상태. `Ctrl+C` 로 종료.
 ⚠️ **venv 안의 python 사용** (시스템 python 이면 mcp 패키지 못 찾음)
 ⚠️ Windows JSON 의 `\` → `\\` 두 개
 
-**Claude Desktop 완전 재시작** → 도구 아이콘에 `notes-agent` 가 보이면 성공.
+**Claude Desktop 완전 재시작** → 도구 아이콘에 `notes-agent` 가 보이면 성공
 
 ---
 
@@ -344,30 +359,22 @@ Claude Desktop 의 내부 흐름:
 3. Claude 가 결과 기반으로 자연어 답
 ```
 
-→ **우리 코드 없이도** Claude Desktop 이 검색 + 답.
-**우리는 도구만 제공.**
-
----
-
-# ★ 망가뜨려보기 — MCP 도 약속 위에서
-
-| 망가뜨릴 곳 | 결과 |
-|---|---|
-| `@mcp.tool()` 데코레이터 제거 | Claude Desktop 이 도구 인식 못 함 |
-| docstring 빈 문자열 | Claude 가 도구 용도 몰라 안 부름 |
-| Claude Desktop 안 재시작 | 새 설정 반영 안 됨 (재시작 필수) |
-| venv 가 아닌 시스템 python | `ModuleNotFoundError: mcp` |
-
-> 다시 한 번 — **docstring 한 줄이 도구의 운명을 결정.**
-> W1 의 `description`, W2 의 docstring, W3 의 docstring — 같은 본질.
+→ **우리 코드 없이도** Claude Desktop 이 검색 + 답
+**우리는 도구만 제공**
 
 ---
 
 <!-- _class: lead -->
 
-# 본인 도구 MCP 화
+# Part 2 — 본인 도구 MCP 화
 
-W2 에서 만든 본인 도구 → `my_mcp_server.py`:
+W2 에서 만든 본인 도구 → `my_mcp_server.py`
+
+`@mcp.tool()` 데코레이터 한 줄로 본인 업무용 에이전트 완성
+
+---
+
+# 본인 도구 MCP 화 — 코드 패턴
 
 ```python
 from mcp.server.fastmcp import FastMCP
@@ -383,22 +390,73 @@ if __name__ == "__main__":
     mcp.run()
 ```
 
-Claude Desktop 설정에 추가하면 **본인 업무용 에이전트 완성.**
+이 패턴 그대로 + 본인 도구 함수만 갈아끼우면 **본인 업무용 MCP 서버**
+
+---
+
+# Copilot 으로 직접 짜보기 — 본인 도구 MCP
+
+본인 업무 도구를 MCP 서버로 만들기
+
+**Copilot 프롬프트 예시**
+
+```
+FastMCP 로 MCP 서버 짜줘.
+- 서버 이름: "my-agent"
+- 도구: [본인 도구 이름] (예: get_current_time, search_emails 등)
+- @mcp.tool() 데코레이터
+- 함수 본문은 mock 데이터로 OK
+- mcp.run() 로 stdio 대기
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출 → 발표뷰에서 다같이 비교
+
+---
+
+# Part 2 확장 실습 — Claude Desktop 등록
+
+본인 MCP 서버를 Claude Desktop 에 등록 → 실제 동작 확인
+
+**진행 방식**
+1. `my_mcp_server.py` 작성 (위 Copilot 활동)
+2. Claude Desktop 설정 파일에 등록 (위 양식)
+3. Claude Desktop 재시작 → 도구 아이콘에 본인 서버 보임
+4. 본인 시나리오로 질문 → 도구 호출 확인
+5. 결과 공유
+
+> 결과는 **[Live Code Share](http://3.38.129.150/)** 에 제출
+
+---
+
+# ★ 망가뜨려보기 — MCP 도 약속 위에서
+
+| 망가뜨릴 곳 | 결과 |
+|---|---|
+| `@mcp.tool()` 데코레이터 제거 | Claude Desktop 이 도구 인식 못 함 |
+| docstring 빈 문자열 | Claude 가 도구 용도 몰라 안 부름 |
+| Claude Desktop 안 재시작 | 새 설정 반영 안 됨 (재시작 필수) |
+| venv 가 아닌 시스템 python | `ModuleNotFoundError: mcp` |
+
+> W1 `description`, W2 docstring, W3 docstring — **같은 본질**
+> 도구를 LLM 한테 설명하는 한 줄
 
 ---
 
 # 3주 전체 요약 — 한 줄씩 더한 것
 
 ```
-W1 Part 1: hello.py        client.models.generate_content(...)
-W1 Part 2: agent_loop.py   + 도구 + while 루프  ← 에이전트
-W1 끝:     agent_skill.py  + search_notes      ← RAG 맛
-W2 Part 1: rag.py          + system_instruction ← grounding
-W2 Part 2: langchain        100줄 → 한 줄
-W3 (오늘): mcp_server.py    데코레이터 한 줄 = 표준 도구화
+W1: hello.py        client.models.generate_content(...)
+W1: chat.py         + history 누적
+W1: agent_loop.py   + 도구 + while 루프  ← 에이전트
+W1: agent_skill.py  + search_notes        ← 도구 확장
+W2: rag.py          + system_instruction  ← grounding
+W2: langchain        100줄 → 한 줄 (create_react_agent)
+W3: mcp_server.py   데코레이터 한 줄 = 표준 도구화
 ```
 
-**한 줄로**: 이 모든 게 W1 의 `generate_content(...)` 한 줄 위에 한 줄씩 더한 것.
+**한 줄로**: W1 의 `generate_content(...)` 한 줄 위에 한 줄씩 더한 것
 
 ---
 
@@ -430,7 +488,7 @@ W3 (오늘): mcp_server.py    데코레이터 한 줄 = 표준 도구화
 
 <!-- _class: lead -->
 
-# 감사합니다 🙏
+# 감사합니다
 
 > "오늘 이후 자기 업무에 적용할 때 막히면,
 > **도구 함수만 새로 짜고 골격은 그대로 두세요.**
