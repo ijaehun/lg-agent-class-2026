@@ -384,6 +384,24 @@ print(response.text)                # response 객체의 텍스트 필드
 
 ---
 
+# Copilot 으로 직접 짜보기 — LLM 호출
+
+베이스라인 (`hello.py`) 본 후 → Copilot 으로 같은 코드 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+Gemini API 로 한 번 LLM 호출하는 간단한 스크립트 짜줘.
+- google.genai SDK
+- .env 에서 GEMINI_API_KEY 로드
+- 모델: gemini-2.5-flash
+- 응답 텍스트 출력
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가? 다르면 어디?
+
+---
+
 # LLM 은 매 호출 백지 상태 (Stateless)
 
 **LLM 자체의 특성**
@@ -424,14 +442,36 @@ while True:
 
 ---
 
+# Copilot 으로 직접 짜보기 — 챗봇
+
+베이스라인 (`chat.py`) 본 후 → Copilot 으로 같은 챗봇 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+Gemini API 로 멀티턴 챗봇을 짜줘.
+- google.genai SDK 사용
+- .env 에서 GEMINI_API_KEY 로드
+- history 리스트 누적, 매 호출마다 전체 전달
+- "exit" 또는 빈 줄 입력 시 종료
+- 모델: gemini-2.5-flash
+```
+
+**비교 포인트**
+- Copilot 답이 베이스라인과 같은가?
+- 다르면 어디가 다른가? 동작은 같은가?
+
+---
+
 # Part 1 확장 실습
 
 베이스라인 (`hello.py` + `chat.py`) 위에 본인 아이디어 추가
 
 **확장 예시**
-- 시스템 프롬프트 ("항상 영어로 답하라" 등)
-- 대화 저장 / 불러오기
-- 응답 스트리밍
+- 페르소나 지정 ("너는 친절한 비서 / 시인 / 코미디언" 등)
+- `temperature` 조절 — 응답 다양성 체감 (0.0 vs 1.5)
+- 응답 시간 / 토큰 사용량 표시
+- 응답 다시 받기 (`regenerate` 명령)
 
 **진행** — 기능 선택 → Copilot 구현 → 결과 공유
 
@@ -557,7 +597,7 @@ config = types.GenerateContentConfig(tools=[...])
 
 **목적** — `notes/` 폴더의 노트 파일 한 개 읽기
 
-**시그니처**
+**함수 형태**
 
 ```python
 def read_note(filename: str) -> str
@@ -614,6 +654,25 @@ read_note_declaration = {
     },
 }
 ```
+
+---
+
+# Copilot 으로 직접 짜보기 — 도구 호출
+
+베이스라인 (`tool_use.py`) 본 후 → Copilot 으로 같은 코드 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+Gemini API 로 도구 호출 (function calling) 한 턴 짜줘.
+- read_note(filename) 도구 (notes/ 폴더의 .md 파일 읽기)
+- LLM 호출 → function_call 추출 → 함수 실행
+- 결과를 function_response 로 LLM 에 다시 전달
+- 자연어 답변 받기
+- 모델: gemini-2.5-flash
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
 
 ---
 
@@ -714,6 +773,25 @@ Model: 5월 19일 회의에선 인증 모듈 도입과 OJT 일정...
 
 ---
 
+# Copilot 으로 직접 짜보기 — 에이전트
+
+베이스라인 (`agent_loop.py`) 본 후 → Copilot 으로 같은 에이전트 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+Gemini API 로 에이전트 (agent loop) 짜줘.
+- 도구: list_notes (파일 목록), read_note (파일 읽기)
+- while 루프로 LLM 이 자연어 답할 때까지 반복
+- MAX_TURNS 안전장치
+- function_call / function_response 형식
+- 모델: gemini-2.5-flash
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가? 동작은?
+
+---
+
 # `agent_loop.py` 의 한계
 
 질문 예시 — "신입사원 연차 정책 알려줘"
@@ -761,6 +839,24 @@ LLM 의 처리 흐름:
 1. 파일명 모르니 `search_notes("연차")` 로 매칭 파일 찾기
 2. 결과 (`policy_leave.md` 등) → `read_note` 로 내용 읽기
 3. 정책 내용 보고 자연어로 답변
+
+---
+
+# Copilot 으로 직접 짜보기 — 도구 추가
+
+베이스라인 (`agent_skill.py`) 본 후 → Copilot 으로 같은 도구 추가 코드 짜보기
+
+**Copilot 프롬프트 예시**
+
+```
+agent_loop.py (list_notes + read_note 도구) 위에 search_notes 도구 추가해줘.
+- search_notes(keyword): notes/ 폴더의 .md 파일에서 키워드 포함 파일 반환
+- TOOL_FUNCTIONS / tool_declarations 에 등록
+- agent loop 본문은 그대로
+- 모델: gemini-2.5-flash
+```
+
+**비교** — Copilot 답이 베이스라인과 같은가?
 
 ---
 
