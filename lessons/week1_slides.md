@@ -627,8 +627,7 @@ config = types.GenerateContentConfig(tools=[types.Tool(function_declarations=[..
 
 # [3] LLM 호출 → 응답에 function_call 이 들어있음 (텍스트 대신)
 resp = client.models.generate_content(model=MODEL, contents=history, config=config)
-fc = resp.candidates[0].content.parts[0].function_call
-# fc.name = "read_note" / fc.args = {"filename": "policy_leave.md"}
+fc = resp.candidates[0].content.parts[0].function_call    # fc.name, fc.args
 
 # [4] ★ 우리가 함수 실행 + function_response 로 LLM 에 결과 돌려줌
 result = read_note(**fc.args)

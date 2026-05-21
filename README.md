@@ -27,7 +27,7 @@ lessons/                강의 슬라이드 (Marp)
 |---|---|---|---|
 | **1** | **LLM + 에이전트** | `hello.py` `chat.py` `tool_use.py` `agent_loop.py` `agent_skill.py` | LLM 호출 → 도구로 노트 읽기 → 검색 도구 추가 |
 | **2** | **RAG 심화 + LangChain** | `rag.py` `notes_agent.py` `langchain_agent.py` | `system_instruction` grounding + 같은 일을 **LangChain 한 줄로** |
-| **3** | **MCP 표준 + 종강** | `mcp_server.py` | 도구를 **표준 단자로** 노출 (Claude Desktop 에서 직접 사용) |
+| **3** | **MCP 표준 + 종강** | `mcp_server.py` `mcp_client.py` | 도구를 **표준 단자로** 노출 (Claude Desktop 에서 직접 사용) |
 
 ## 학습 방식
 

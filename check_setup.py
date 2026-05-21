@@ -28,7 +28,7 @@ def main() -> None:
             contents="한 줄로 '셋업 OK' 라고 답해줘",
         )
         print(f"[OK] Gemini 응답: {response.text.strip()}")
-        print("\n환경 셋업 완료. 다음 회차 (Week 0) 에서 만나요.")
+        print("\n환경 셋업 완료. 첫 회차에서 만나요.")
     except Exception as e:
         print(f"[X] API 호출 실패: {e}")
         print("SETUP.md 의 '자주 발생하는 문제' 표 확인.")

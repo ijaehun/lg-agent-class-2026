@@ -15,6 +15,7 @@ mcp_server.py 를 subprocess 로 띄워 stdio 로 통신.
 import asyncio
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -25,6 +26,7 @@ load_dotenv()
 gemini = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.5-flash"
 MAX_TURNS = 10
+SERVER_PATH = str(Path(__file__).parent / "mcp_server.py")
 
 
 def mcp_tool_to_gemini(mcp_tool) -> dict:
@@ -40,7 +42,7 @@ async def run_agent(user_question: str, session: ClientSession) -> None:
     # === 1. MCP 서버에서 도구 목록 받아 Gemini 스키마로 변환 ===
     tools_response = await session.list_tools()
     declarations = [mcp_tool_to_gemini(t) for t in tools_response.tools]
-    print(f"📡 MCP 서버에서 도구 {len(declarations)}개 받음: {[d['name'] for d in declarations]}\n")
+    print(f"[MCP] 서버에서 도구 {len(declarations)}개 받음: {[d['name'] for d in declarations]}\n")
 
     config = types.GenerateContentConfig(
         system_instruction=(
@@ -74,7 +76,10 @@ async def run_agent(user_question: str, session: ClientSession) -> None:
             print(f"[MCP 호출] {fc.name}({args})")
             # 핵심: 우리 코드 안에 함수 본체가 없음. MCP 서버에 위임.
             result = await session.call_tool(fc.name, arguments=args)
-            result_text = result.content[0].text if result.content else ""
+            # content 는 list — 여러 TextContent 로 쪼개져 올 수 있어 모두 합침
+            result_text = "\n".join(
+                c.text for c in result.content if hasattr(c, "text")
+            )
             preview = result_text[:200].replace("\n", " ")
             print(f"[결과]      {preview}{'…' if len(result_text) > 200 else ''}")
             tool_response_parts.append({
@@ -90,9 +95,10 @@ async def run_agent(user_question: str, session: ClientSession) -> None:
 
 async def main():
     # MCP 서버를 subprocess 로 띄움 — 현재 Python 인터프리터 (venv) 사용
+    # ★ 절대경로 — 학생이 어디서 실행하든 서버를 찾을 수 있음
     server_params = StdioServerParameters(
         command=sys.executable,
-        args=["mcp_server.py"],
+        args=[SERVER_PATH],
     )
 
     async with stdio_client(server_params) as (read, write):

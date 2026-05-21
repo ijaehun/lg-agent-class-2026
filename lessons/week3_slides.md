@@ -178,6 +178,14 @@ style: |
 
 <!-- _class: lead -->
 
+# 📘 Part 1 — MCP 서버 만들기
+
+`mcp_server.py`
+
+W2 의 `search_notes` 그대로 — **두 줄만 추가**해서 표준 도구로 노출
+
+---
+
 # 왜 MCP?
 
 지금까지 우리는:
@@ -363,9 +371,32 @@ Claude Desktop 의 내부 흐름:
 
 ---
 
+# Part 1 정리
+
+MCP 서버 만들기 완료
+
+- `mcp_server.py` — `@mcp.tool()` 두 줄로 W2 도구를 표준화
+- Claude Desktop 등록 → 우리 코드 없이 검색 + 답
+- `rag.py` ↔ `mcp_server.py` — 함수 본문 100% 동일
+
+> 우리 도구 하나를 MCP 로 노출했음. **이제 본인 도구도.**
+
+---
+
+# Part 1 의 한계
+
+- 지금 노출한 건 `search_notes` 하나 — 우리가 만든 W2 도구
+- 본인 업무 도구는 아직 코드 안에 머물러 있음
+
+**목표** — 본인 업무 도구를 같은 방식으로 MCP 화
+
+> `@mcp.tool()` 한 줄 패턴 그대로 → 본인 도구만 갈아끼우면 됨
+
+---
+
 <!-- _class: lead -->
 
-# Part 2 — 본인 도구 MCP 화
+# 🔌 Part 2 — 본인 도구 MCP 화
 
 W2 에서 만든 본인 도구 → `my_mcp_server.py`
 
@@ -427,14 +458,14 @@ FastMCP 로 MCP 서버 짜줘.
 
 ---
 
-# ★ 망가뜨려보기 — MCP 도 약속 위에서
+# 흔한 실수 / 디버깅 체크리스트
 
-| 망가뜨릴 곳 | 결과 |
+| 증상 | 원인 |
 |---|---|
-| `@mcp.tool()` 데코레이터 제거 | Claude Desktop 이 도구 인식 못 함 |
-| docstring 빈 문자열 | Claude 가 도구 용도 몰라 안 부름 |
-| Claude Desktop 안 재시작 | 새 설정 반영 안 됨 (재시작 필수) |
-| venv 가 아닌 시스템 python | `ModuleNotFoundError: mcp` |
+| Claude Desktop 이 도구를 인식 못 함 | `@mcp.tool()` 데코레이터 누락 |
+| LLM 이 도구를 안 부름 | docstring 비어있음 → 용도를 모름 |
+| 설정 바꿨는데 안 보임 | Claude Desktop 재시작 누락 (필수) |
+| `ModuleNotFoundError: mcp` | venv 가 아닌 시스템 python 사용 |
 
 > W1 `description`, W2 docstring, W3 docstring — **같은 본질**
 > 도구를 LLM 한테 설명하는 한 줄
