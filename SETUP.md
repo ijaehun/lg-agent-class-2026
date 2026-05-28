@@ -113,7 +113,11 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-`google-genai`, `python-dotenv`, `mcp` 세 패키지가 설치됩니다 (1~2분 소요).
+다음 패키지들이 설치됩니다 (2~3분 소요):
+- `google-genai`, `python-dotenv` — Gemini 호출 + `.env` 로딩 (W1)
+- `langchain-google-genai`, `langgraph` — LangChain / LangGraph (W2 Part 2)
+- `notebook` — W2 Jupyter notebook 실행 (`jupyter notebook` 명령 포함)
+- `numpy` — vector retriever (cosine 유사도 계산)
 
 ---
 
@@ -159,11 +163,32 @@ python check_setup.py
 환경 셋업 완료. 첫 회차에서 만나요.
 ```
 
-> 실제 강의 코드 (`hello.py` 등) 는 `week1_llm_agent/`, `week2_rag_langchain/`, `week3_mcp/` 폴더 안에 베이스라인으로 들어있고, 강의 시간에 함께 읽고 Copilot 으로 확장합니다.
+> 실제 강의 자료는 `week1_llm_agent/` (W1 `.py` 파일들) 과 `week2/week2.ipynb` (W2 Jupyter notebook) 에 있습니다. 강의 시간에 함께 읽고 실행합니다.
 
 ---
 
-## 7. VS Code 설치
+## 7. W2 Jupyter 실행 확인
+
+W2 는 `.py` 파일이 아니라 **Jupyter notebook** (`week2/week2.ipynb`) 으로 진행합니다. 강의 시작 전에 한 번 열어보고 오세요.
+
+가상환경이 활성화된 상태에서 (`(.venv)` 프롬프트 확인):
+
+```bash
+jupyter notebook
+```
+
+브라우저가 자동으로 열리면서 파일 목록이 보입니다.
+→ `week2/` 폴더 → `week2.ipynb` 클릭 → 열리면 성공.
+
+> 닫을 때: 터미널에서 `Ctrl+C` 두 번.
+
+**VS Code 안에서 열어도 OK** — `week2.ipynb` 파일 더블클릭하면 VS Code 가 notebook 으로 띄워줍니다. 우측 상단에서 커널을 `.venv` (Python 3.12) 로 선택만 하면 됩니다.
+
+> Jupyter 사용법은 강의 시간에 같이 봅니다. 지금은 **열리는 것까지만** 확인.
+
+---
+
+## 8. VS Code 설치
 
 코드를 편집할 에디터입니다. 강의 내내 사용합니다.
 
@@ -194,7 +219,7 @@ VS Code 왼쪽 사이드바 **Extensions** (네모 4개 아이콘) 에서:
 
 ---
 
-## 8. GitHub Copilot 가입 + 설치
+## 9. GitHub Copilot 가입 + 설치
 
 강의 첫 회차부터 "LLM 이 코드를 만들어주는 경험" 을 위해 사용합니다.
 

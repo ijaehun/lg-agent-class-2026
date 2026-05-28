@@ -1,5 +1,6 @@
 google-genai>=2.0.1
 python-dotenv>=1.2.2
-mcp>=1.6.0
 langchain-google-genai>=2.0
 langgraph>=0.2
+notebook>=7.0
+numpy>=1.26
