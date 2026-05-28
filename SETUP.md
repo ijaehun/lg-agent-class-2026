@@ -163,7 +163,7 @@ python check_setup.py
 환경 셋업 완료. 첫 회차에서 만나요.
 ```
 
-> 실제 강의 자료는 `week1_llm_agent/` (W1 `.py` 파일들) 과 `week2/week2.ipynb` (W2 Jupyter notebook) 에 있습니다. 강의 시간에 함께 읽고 실행합니다.
+> 실제 강의 자료는 `week1/` (W1 `.py` 파일들) 과 `week2/week2.ipynb` (W2 Jupyter notebook) 에 있습니다. 강의 시간에 함께 읽고 실행합니다.
 
 ---
 
