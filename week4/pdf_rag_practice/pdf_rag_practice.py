@@ -85,7 +85,7 @@ def create_vector_db():
     splits = text_splitter.split_documents(docs)
 
     # 1-3. 임베딩 생성 (Embedding)
-    embeddings = OllamaEmbeddings(model="EMBEDDING_MODEL", base_url=OLLAMA_BASE_URL)
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=OLLAMA_BASE_URL)
 
     # 1-4. 벡터 저장소 구축 (Vector Database)
     vector_store = FAISS.from_documents(documents=splits, embedding=embeddings)
