@@ -35,7 +35,7 @@ RAG 실습 코드 (RAG 예제 4)
         pip install typing
 
 - 실행 코드
-    streamlit run rag_practice.py
+    streamlit run chatbot_rag_practice.py
 
 """
 
