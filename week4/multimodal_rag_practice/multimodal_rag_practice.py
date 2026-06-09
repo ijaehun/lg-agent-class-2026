@@ -173,7 +173,7 @@ formatted_prompt = {"context": combined_docs, "question": question}
 print(f"프롬프트:\n{formatted_prompt}")
 result = ""
 for chunk in chat_chain.stream(formatted_prompt):
-    # print(chunk, end="", flush=True)
+    print(chunk, end="", flush=True)
     result += chunk
 print("\n-----------------------------------------")
 
