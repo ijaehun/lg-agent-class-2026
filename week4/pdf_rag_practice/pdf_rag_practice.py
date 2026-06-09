@@ -99,7 +99,7 @@ def create_vector_db():
 if os.path.exists(VECTOR_DB_PATH):
     # 벡터 DB 파일이 존재하면 로드
     print("기존 벡터 DB를 로드합니다.")
-    embeddings = OllamaEmbeddings(model="EMBEDDING_MODEL", base_url=OLLAMA_BASE_URL)
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=OLLAMA_BASE_URL)
     # 로컬 경로에서 벡터 DB를 불러오고, 지정된 임베딩 객체를 사용해 벡터를 처리
     # allow_dangerous_deserialization=True 옵션은 로컬 파일에서 벡터 DB를 불러올 때, 신뢰할 수 있는 소스임을 확인한 경우에만 사용해야 하는 옵션임.
     # 이 옵션을 사용하면 보안 위험이 있을 수 있으므로, 반드시 신뢰할 수 있는 파일에서만 사용해야 함.
