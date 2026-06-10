@@ -15,20 +15,20 @@ pip install -r requirements.txt
 ## 폴더 구조
 
 ```
-notes/        공유 데이터 예시 (정책, 회의록, 온보딩 문서)
-week1/        LLM + 에이전트 기초 (.py)
-week2/        RAG + LangChain + MCP (Jupyter notebook)
+week1/        LLM + 에이전트 기초 (.py + 슬라이드 + 공유 데이터 notes/)
+week2/        RAG + LangChain + MCP (Jupyter notebook + 슬라이드)
 week3/        (실습 공간)
 week4/        RAG 심화 + MCP 실습 모음 + 강의 PDF
-lessons/      강의 슬라이드 (Marp)
 ```
+
+각 주차 폴더 안에 코드 · 슬라이드 · 데이터가 함께 들어 있습니다.
 
 ## 회차별 자료
 
 | 회차 | 주제 | 메인 자료 |
 |---|---|---|
-| Week 1 | LLM + 에이전트 기초 | `week1/*.py` · `lessons/week1_slides.md` |
-| Week 2 | RAG + LangChain + MCP | `week2/week2.ipynb` · `lessons/week2_slides.md` |
+| Week 1 | LLM + 에이전트 기초 | `week1/*.py` · `week1/week1_slides.md` |
+| Week 2 | RAG + LangChain + MCP | `week2/week2.ipynb` · `week2/week2_slides.md` |
 | Week 4 | RAG 심화 + MCP 실습 | `week4/` (아래 참고) · 강의 PDF (KAMP 5·6일차) |
 
 ## week4 실습 목록

@@ -19,7 +19,7 @@ client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.5-flash"
 MAX_TURNS = 5
 
-NOTES_DIR = Path(__file__).parent.parent / "notes"
+NOTES_DIR = Path(__file__).parent / "notes"
 
 
 # === 도구 함수 두 개 ===

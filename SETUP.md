@@ -215,7 +215,7 @@ code .
 VS Code 왼쪽 사이드바 **Extensions** (네모 4개 아이콘) 에서:
 - **Python** (Microsoft 공식)
 - **한국어 언어팩** (Korean Language Pack — 메뉴 한글로 보고 싶은 분만)
-- **Marp for VS Code** — 강의 슬라이드 (`lessons/week*_slides.md`) 를 본인 화면에서 미리보기 할 수 있게. 설치 후 슬라이드 파일 열고 우측 상단 **"Open Preview to the Side"** 아이콘 클릭.
+- **Marp for VS Code** — 강의 슬라이드 (`week1/week1_slides.md`, `week2/week2_slides.md`) 를 본인 화면에서 미리보기 할 수 있게. 설치 후 슬라이드 파일 열고 우측 상단 **"Open Preview to the Side"** 아이콘 클릭.
 
 ---
 

@@ -16,7 +16,7 @@ from google.genai import types
 load_dotenv()
 client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 MODEL = "gemini-2.5-flash"
-NOTES_DIR = Path(__file__).parent.parent / "notes"
+NOTES_DIR = Path(__file__).parent / "notes"
 
 
 # === [1] 도구 함수 — 그냥 일반 Python 함수 ===
