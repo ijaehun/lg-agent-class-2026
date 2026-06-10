@@ -1,0 +1,38 @@
+[
+  {
+    "run_id": "run_001",
+    "key": "correctness",
+    "score": 0,
+    "comment": ""
+  },
+  {
+    "run_id": "run_001",
+    "key": "score",
+    "score": 1.5,
+    "comment": ""
+  },
+  {
+    "run_id": "run_001",
+    "key": "notes",
+    "score": null,
+    "comment": "서론, 본론, 결론이 순서를 요약해줘."
+  },
+  {
+    "run_id": "run_002",
+    "key": "correctness",
+    "score": 1,
+    "comment": ""
+  },
+  {
+    "run_id": "run_002",
+    "key": "score",
+    "score": 4.0,
+    "comment": ""
+  },
+  {
+    "run_id": "run_002",
+    "key": "notes",
+    "score": null,
+    "comment": "핵심 문장에 번호를 붙이면 더 좋겠습니다."
+  }
+]
