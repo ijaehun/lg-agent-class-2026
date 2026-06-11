@@ -1,0 +1,11 @@
+test_id,model,condition,ambient_temp_c,ambient_humidity_pct,door_open_count,gasket_status,door_alignment,condensation_grade,note
+T001,BIC-700,basic,30,68,10,normal,normal,OK,기본 조건 이상 없음
+T002,BIC-700,high_humidity,31,78,12,normal,normal,WARNING,도어 좌측 상단 미세 결로
+T003,BIC-700,door_open_stress,30,72,28,normal,normal,WARNING,개폐 반복 후 중앙부 미세 결로
+T004,BIC-700,gasket_contamination,30,70,10,contaminated,normal,WARNING,가스켓 하단 이물 확인
+T005,BIC-800,builtin_poor_ventilation,32,80,25,normal,minor_gap,NG,우측 상단 결로 반복 발생
+T006,BIC-800,basic,30,69,10,normal,normal,OK,기본 조건 이상 없음
+T007,BIC-800,high_humidity,32,82,14,normal,normal,WARNING,고습 조건에서 외곽 결로 발생
+T008,BIC-900,door_alignment,30,71,12,normal,misaligned,NG,도어 닫힘 지연 및 하단 결로
+T009,BIC-900,basic,30,70,10,normal,normal,OK,기본 조건 이상 없음
+T010,BIC-900,combined_stress,32,84,30,contaminated,minor_gap,NG,고습+개폐+밀착 저하 복합 조건
